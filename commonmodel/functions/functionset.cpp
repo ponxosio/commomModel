@@ -22,7 +22,7 @@ bool FunctionSet::canDoOperations(unsigned long mask) {
     return ((mask & posibleops) == mask);
 }
 
-double FunctionSet::doOperation(Function::OperationType op, int nargs, va_list args) throw (std::invalid_argument) {
+MultiUnitsWrapper* FunctionSet::doOperation(Function::OperationType op, int nargs, va_list args) throw (std::invalid_argument) {
     int castop = (int) op;
 
     auto it = functionsMap.find(castop);
@@ -34,7 +34,7 @@ double FunctionSet::doOperation(Function::OperationType op, int nargs, va_list a
     }
 }
 
-double FunctionSet::getMinVolume(Function::OperationType op) throw (std::invalid_argument) {
+units::Volume FunctionSet::getMinVolume(Function::OperationType op) throw (std::invalid_argument) {
     int castop = (int) op;
 
     auto it = functionsMap.find(castop);

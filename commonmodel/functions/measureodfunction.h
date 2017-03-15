@@ -9,15 +9,17 @@
 #include "commonmodel/plugininterface/odsensorpluginproduct.h"
 #include "commonmodel/functions/function.h"
 
-class MeasureOdFunction : public Function
+#include "commonmodel/commommodel_global.h"
+
+class MEASUREOD_EXPORT MeasureOdFunction : public Function
 {
 public:
     MeasureOdFunction(std::shared_ptr<PluginAbstractFactory> factory, const PluginConfiguration & configuration, double minVolume);
     virtual ~MeasureOdFunction();
 
     virtual OperationType getAceptedOp();
-    virtual double doOperation(int nargs, va_list args) throw (std::invalid_argument);
-    virtual double getMinVolume();
+    virtual MultiUnitsWrapper* doOperation(int nargs, va_list args) throw (std::invalid_argument);
+    virtual units::Volume getMinVolume();
 
 protected:
     double minVolume;

@@ -14,7 +14,7 @@ Function::OperationType PumpPluginFunction::getAceptedOp() {
     return pump;
 }
 
-double PumpPluginFunction::doOperation(int nargs, va_list args) throw (std::invalid_argument) {
+MultiUnitsWrapper* PumpPluginFunction::doOperation(int nargs, va_list args) throw (std::invalid_argument) {
     if (!pluginPump) {
         pluginPump = factory->makePump(configurationObj);
     }
@@ -22,15 +22,15 @@ double PumpPluginFunction::doOperation(int nargs, va_list args) throw (std::inva
     if (nargs == 2) {
         //va_start(args, nargs);
         int dir = va_arg(args, int);
-        double rate = va_arg(args, double);
+        units::Volumetric_Flow rate = va_arg(args, units::Volumetric_Flow);
         pluginPump->setPumpState(dir, rate);
         //va_end(args);
-        return -1;
+        return NULL;
     } else {
         throw(std::invalid_argument(" doOperation() of PumpPluginFunction must receive 2 arguments, received " + std::to_string(nargs)));
     }
 }
 
-double PumpPluginFunction::getMinVolume() {
+units::Volume PumpPluginFunction::getMinVolume() {
     return 0.0;
 }

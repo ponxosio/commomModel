@@ -14,22 +14,22 @@ Function::OperationType StirFunction::getAceptedOp() {
     return stir;
 }
 
-double StirFunction::doOperation(int nargs, va_list args) throw (std::invalid_argument) {
+MultiUnitsWrapper* StirFunction::doOperation(int nargs, va_list args) throw (std::invalid_argument) {
     if (!stirPlugin) {
         stirPlugin = factory->makeStirer(configurationObj);
     }
 
     if (nargs == 1) {
         //va_start(ap, args);
-        double intensity = va_arg(args, double);
+        units::Frequency intensity = va_arg(args, units::Frequency);
         stirPlugin->stir(intensity);
         //va_end(ap);
-        return -1;
+        return NULL;
     } else {
         throw(std::invalid_argument(" doOperation() of StirFunction must receive 1 argument, received " + std::to_string(nargs)));
     }
 }
 
-double StirFunction::getMinVolume() {
+units::Volume StirFunction::getMinVolume() {
     return minVolume;
 }

@@ -14,17 +14,17 @@
 class ComponentInterface {
 public:
     ComponentInterface(){}
-    ComponentInterface(const ComponentInterface & obj) : availableFunctios(obj.availableFunctios){}
+    ComponentInterface(const ComponentInterface & obj) : availableFunctions(obj.availableFunctions){}
     virtual ~ComponentInterface(){}
 
     virtual bool canDoOperations(unsigned long mask) = 0;
-    virtual double doOperation(Function::OperationType op, int nargs, ...) throw (std::invalid_argument) = 0;
-    virtual double getMinVolume(Function::OperationType op) throw (std::invalid_argument) = 0;
+    virtual MultiUnitsWrapper* doOperation(Function::OperationType op, int nargs, ...) throw (std::invalid_argument) = 0;
+    virtual units::Volume getMinVolume(Function::OperationType op) throw (std::invalid_argument) = 0;
 
     inline const FunctionSet & getAvailableFunctions() const {
-        return availableFunctios;
+        return availableFunctions;
     }
 protected:
-    FunctionSet availableFunctios;
+    FunctionSet availableFunctions;
 };
 #endif // COMPONENTINTERFACE_H

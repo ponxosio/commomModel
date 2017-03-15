@@ -18,8 +18,8 @@ public:
     virtual ~PumpPluginFunction();
 
     virtual OperationType getAceptedOp();
-    virtual double doOperation(int nargs, va_list args) throw (std::invalid_argument);
-    virtual double getMinVolume();
+    virtual MultiUnitsWrapper* doOperation(int nargs, va_list args) throw (std::invalid_argument);
+    virtual units::Volume getMinVolume();
 
 protected:
     PluginConfiguration configurationObj;

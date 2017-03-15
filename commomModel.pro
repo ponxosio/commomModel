@@ -6,7 +6,7 @@
 
 QT       -= gui
 
-TARGET = commomModel
+TARGET = commonModel
 TEMPLATE = lib
 
 DEFINES += COMMOMMODEL_LIBRARY

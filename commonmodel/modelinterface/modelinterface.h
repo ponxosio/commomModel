@@ -2,12 +2,12 @@
 #define MODELINTERFACE_H
 
 #include <memory>
-#include <string>
 #include <stdexcept>
 
 #include <protocolGraph/ProtocolGraph.h>
 #include <utils/units.h>
 
+#include "commonmodel/mappinginterface/mappinginterface.h"
 #include "commonmodel/modelinterface/componentinterface.h"
 
 class ModelInterface {
@@ -20,10 +20,9 @@ public:
     virtual ~ModelInterface(){}
 
     virtual bool canDoMovement(unsigned long mask) = 0;
-    virtual bool findProtocolRelation(std::shared_ptr<ProtocolGraph> protocol) = 0;
+    virtual std::shared_ptr<MappingInterface> findProtocolRelation(std::shared_ptr<ProtocolGraph> protocol) throw(std::invalid_argument) = 0;
 
-    virtual std::shared_ptr<ComponentInterface> getComponent(const std::string & virtualContainer) throw(std::invalid_argument) = 0;
-    virtual int getIdVirtualContainer(const std::string & virtualContainer) throw(std::invalid_argument) = 0;
+    virtual std::shared_ptr<ComponentInterface> getComponent(int virtualContainer) throw(std::invalid_argument) = 0;
 
     virtual void loadContainer(int containerId, units::Volume volume) throw(std::invalid_argument) = 0;
     virtual void transferLiquid(int sourceId, int targetId,  units::Volume volume) throw(std::invalid_argument) = 0;

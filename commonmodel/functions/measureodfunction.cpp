@@ -14,7 +14,7 @@ Function::OperationType MeasureOdFunction::getAceptedOp() {
     return measure_od;
 }
 
-double MeasureOdFunction::doOperation(int nargs, va_list args) throw (std::invalid_argument) {
+MultiUnitsWrapper* MeasureOdFunction::doOperation(int nargs, va_list args) throw (std::invalid_argument) {
     if (!odSensoPlugin) {
         odSensoPlugin = factory->makeOdSensor(configurationObj);
     }
@@ -22,12 +22,14 @@ double MeasureOdFunction::doOperation(int nargs, va_list args) throw (std::inval
     if (nargs == 0) {
         //va_start(args, nargs);
         //va_end(args);
-        return odSensoPlugin->measureOd();
+        MultiUnitsWrapper* valueRead = new MultiUnitsWrapper();
+        valueRead->setNoUnits(odSensoPlugin->measureOd());
+        return valueRead;
     } else {
         throw(std::invalid_argument(" doOperation() of MeasureOdFunction must receive 0 argument, received " + std::to_string(nargs)));
     }
 }
 
-double MeasureOdFunction::getMinVolume() {
+units::Volume MeasureOdFunction::getMinVolume() {
     return minVolume;
 }

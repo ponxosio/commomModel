@@ -14,10 +14,15 @@
 #include <cstdarg>
 #include <stdexcept>
 
+#include <utils/units.h>
+#include <utils/multiunitswrapper.h>
+
 #include "commonmodel/functions/function.h"
 #include "commonmodel/plugininterface/pluginabstractfactory.h"
 
-class FunctionSet
+#include "commonmodel/commommodel_global.h"
+
+class FUNCTIONSET_EXPORT FunctionSet
 {
 public:
     FunctionSet();
@@ -25,8 +30,8 @@ public:
     virtual ~FunctionSet();
 
     bool canDoOperations(unsigned long mask);
-    double doOperation(Function::OperationType op, int nargs, va_list args) throw(std::invalid_argument);
-    double getMinVolume(Function::OperationType op) throw(std::invalid_argument);
+    MultiUnitsWrapper* doOperation(Function::OperationType op, int nargs, va_list args) throw(std::invalid_argument);
+    units::Volume getMinVolume(Function::OperationType op) throw(std::invalid_argument);
     void addOperation(std::shared_ptr<Function> function);
 
     void setFactory(std::shared_ptr<PluginAbstractFactory> factory);

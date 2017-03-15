@@ -14,23 +14,23 @@ Function::OperationType LightFunction::getAceptedOp() {
     return apply_light;
 }
 
-double LightFunction::doOperation(int nargs, va_list args) throw (std::invalid_argument) {
+MultiUnitsWrapper* LightFunction::doOperation(int nargs, va_list args) throw (std::invalid_argument) {
     if (!lightPlugin) {
         lightPlugin = factory->makeLight(configurationObj);
     }
 
     if (nargs == 2) {
         //va_start(ap, args);
-        double intensity = va_arg(args, double);
-        double wavelength = va_arg(args, double);
+        units::LuminousIntensity intensity = va_arg(args, units::LuminousIntensity);
+        units::Length wavelength = va_arg(args, units::Length);
         lightPlugin->applyLight(intensity, wavelength);
         //va_end(ap);
-        return -1;
+        return NULL;
     } else {
         throw(std::invalid_argument(" doOperation() of LightFunction must receive 2 argument, received " + std::to_string(nargs)));
     }
 }
 
-double LightFunction::getMinVolume() {
+units::Volume LightFunction::getMinVolume() {
     return minVolume;
 }

@@ -14,7 +14,7 @@ Function::OperationType ValvePluginRouteFunction::getAceptedOp() {
     return route;
 }
 
-double ValvePluginRouteFunction::doOperation(int nargs, va_list args) throw (std::invalid_argument) {
+MultiUnitsWrapper* ValvePluginRouteFunction::doOperation(int nargs, va_list args) throw (std::invalid_argument) {
     if (!valvePlugin) {
         valvePlugin = factory->makeValve(configurationObj);
     }
@@ -24,13 +24,13 @@ double ValvePluginRouteFunction::doOperation(int nargs, va_list args) throw (std
         int newPosition = va_arg(args, int);
         valvePlugin->moveToPosition(newPosition);
         //va_end(args);
-        return -1;
+        return NULL;
     } else {
         throw(std::invalid_argument(" doOperation() of ValvePLuginRouteFunction must receive 1 argument, received " + std::to_string(nargs)));
     }
 }
 
-double ValvePluginRouteFunction::getMinVolume() {
+units::Volume ValvePluginRouteFunction::getMinVolume() {
     return 0.0;
 }
 
