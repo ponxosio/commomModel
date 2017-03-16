@@ -27,10 +27,10 @@ public:
     virtual void loadContainer(int containerId, units::Volume volume) throw(std::invalid_argument) = 0;
     virtual void transferLiquid(int sourceId, int targetId,  units::Volume volume) throw(std::invalid_argument) = 0;
 
-    virtual void setContinuousFlow(int sourceId, int targetId,  units::Volumetric_Flow rate) throw(std::invalid_argument) = 0;
+    virtual void setContinuousFlow(int sourceId, int targetId,  units::Volumetric_Flow rate) = 0;
     virtual void setContinuousFlow(const std::vector<int> & containersIds,  units::Volumetric_Flow rate) throw(std::invalid_argument) = 0;
 
-    virtual void stopContinuousFlow(int sourceId, int targetId) throw(std::invalid_argument) = 0;
+    virtual void stopContinuousFlow(int sourceId, int targetId) = 0;
     virtual void stopContinuousFlow(const std::vector<int> & containersIds) throw(std::invalid_argument) = 0;
     virtual void processFlows() throw(std::runtime_error) = 0;
 
