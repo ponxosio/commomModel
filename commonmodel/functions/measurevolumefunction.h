@@ -14,7 +14,7 @@
 class MeasureVolumeFunction : public Function
 {
 public:
-    MeasureVolumeFunction(std::shared_ptr<PluginAbstractFactory> factory, const PluginConfiguration & configuration, double minVolume);
+    MeasureVolumeFunction(std::shared_ptr<PluginAbstractFactory> factory, const PluginConfiguration & configuration, units::Volume minVolume);
     virtual ~MeasureVolumeFunction();
 
     virtual OperationType getAceptedOp();
@@ -22,17 +22,10 @@ public:
     virtual std::shared_ptr<MultiUnitsWrapper> doOperation(int nargs, va_list args) throw (std::invalid_argument);
     virtual units::Volume getMinVolume();
 
-    inline virtual bool inWorkingRange(int nargs, va_list args) throw(std::invalid_argument) {
-        return true;
-    }
-
 protected:
-    double minVolume;
-    PluginConfiguration configurationObj;
+    units::Volume minVolume;
+    std::shared_ptr<PluginConfiguration> configurationObj;
     std::shared_ptr<VolumeSensorProduct> volumeSensorPlugin;
-{
-public:
-    MeasureVolumeFunction();
 };
 
 #endif // MEASUREVOLUMEFUNCTION_H

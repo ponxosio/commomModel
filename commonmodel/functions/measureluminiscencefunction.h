@@ -14,7 +14,7 @@
 class MEASURELUMINISCENCEFUNCTION_EXPORT MeasureLuminiscenceFunction: public Function
 {
 public:
-    MeasureLuminiscenceFunction(std::shared_ptr<PluginAbstractFactory> factory, const PluginConfiguration & configuration, double minVolume);
+    MeasureLuminiscenceFunction(std::shared_ptr<PluginAbstractFactory> factory, const PluginConfiguration & configuration, units::Volume minVolume);
     virtual ~MeasureLuminiscenceFunction();
 
     virtual OperationType getAceptedOp();
@@ -23,8 +23,8 @@ public:
     virtual units::Volume getMinVolume();
 
 protected:
-    double minVolume;
-    PluginConfiguration configurationObj;
+    units::Volume minVolume;
+    std::shared_ptr<PluginConfiguration> configurationObj;
     std::shared_ptr<LuminiscenceSensorProduct> luminiscenceSensoPlugin;
 
 };

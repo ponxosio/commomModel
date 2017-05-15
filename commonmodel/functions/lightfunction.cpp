@@ -1,9 +1,22 @@
 #include "lightfunction.h"
 
-LightFunction::LightFunction(std::shared_ptr<PluginAbstractFactory> factory, const PluginConfiguration & configuration, double minVolume) :
-    Function(factory) , configurationObj(configuration)
+LightFunction::LightFunction(
+        std::shared_ptr<PluginAbstractFactory> factory,
+        const PluginConfiguration & configuration,
+        units::Volume minVolume,
+        units::Length minWaveLength,
+        units::Length maxWaveLength,
+        units::LuminousIntensity minIntensity,
+        units::LuminousIntensity maxIntensity) :
+    Function(factory)
 {
     this->minVolume = minVolume;
+    this->minWaveLength = minWaveLength;
+    this->maxWaveLength = maxWaveLength;
+    this->minIntensity = minIntensity;
+    this->maxIntensity = maxIntensity;
+
+    configurationObj = std::make_shared<PluginConfiguration>(configuration);
 }
 
 LightFunction::~LightFunction() {
@@ -15,15 +28,12 @@ Function::OperationType LightFunction::getAceptedOp() {
 }
 
 bool LightFunction::inWorkingRange(int nargs, va_list args) throw(std::invalid_argument) {
-    if (!lightPlugin) {
-        lightPlugin = factory->makeLight(configurationObj);
-    }
-
     if (nargs == 2) {
         units::LuminousIntensity intensity = va_arg(args, units::LuminousIntensity);
         units::Length wavelength = va_arg(args, units::Length);
 
-        return lightPlugin->inWorkingRange(intensity, wavelength);
+        return (((intensity >= minIntensity) && (intensity <= maxIntensity)) &&
+                ((wavelength >= minWaveLength && (wavelength <= minWaveLength))));
     } else {
         throw(std::invalid_argument(" inWorkingRange() of LightFunction must receive 2 argument, received " + std::to_string(nargs)));
     }

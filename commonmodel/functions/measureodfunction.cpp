@@ -1,9 +1,18 @@
 #include "measureodfunction.h"
 
-MeasureOdFunction::MeasureOdFunction(std::shared_ptr<PluginAbstractFactory> factory, const PluginConfiguration & configuration, double minVolume) :
-    Function(factory), configurationObj(configuration)
+MeasureOdFunction::MeasureOdFunction(
+        std::shared_ptr<PluginAbstractFactory> factory,
+        const PluginConfiguration & configuration,
+        units::Volume minVolume,
+        units::Length minWavelength,
+        units::Length maxWavelength) :
+    Function(factory)
 {
     this->minVolume = minVolume;
+    this->minWavelength = minWavelength;
+    this->maxWavelength = maxWavelength;
+
+    configurationObj = std::make_shared<PluginConfiguration>(configuration);
 }
 
 MeasureOdFunction::~MeasureOdFunction() {
@@ -15,13 +24,9 @@ Function::OperationType MeasureOdFunction::getAceptedOp() {
 }
 
 bool MeasureOdFunction::inWorkingRange(int nargs, va_list args) throw(std::invalid_argument) {
-    if (!odSensoPlugin) {
-        odSensoPlugin = factory->makeOdSensor(configurationObj);
-    }
-
     if (nargs == 1) {
         units::Length wavelength = va_arg(args, units::Length);
-        return odSensoPlugin->inWorkingRange(wavelength);
+        return ((wavelength >= minWavelength) && (wavelength <= maxWavelength));
     } else {
         throw(std::invalid_argument(" inWorkingRange() of MeasureOdFunction must receive 1 argument, received " + std::to_string(nargs)));
     }

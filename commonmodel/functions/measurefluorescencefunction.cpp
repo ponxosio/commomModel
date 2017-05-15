@@ -3,11 +3,20 @@
 MeasureFluorescenceFunction::MeasureFluorescenceFunction(
         std::shared_ptr<PluginAbstractFactory> factory,
         const PluginConfiguration & configuration,
-        double minVolume) :
-    configurationObj(configuration)
+        units::Volume minVolume,
+        units::Length minEmission,
+        units::Length maxEmission,
+        units::Length minExcitation,
+        units::Length maxExcitation) :
+    Function(factory)
 {
-    this->factory = factory;
     this->minVolume = minVolume;
+    this->minEmission = minEmission;
+    this->maxEmission = maxEmission;
+    this->minExcitation = minExcitation;
+    this->maxExcitation = maxExcitation;
+
+    configurationObj = std::make_shared<PluginConfiguration>(configuration);
 }
 
 MeasureFluorescenceFunction::~MeasureFluorescenceFunction() {
@@ -19,15 +28,12 @@ Function::OperationType MeasureFluorescenceFunction::getAceptedOp() {
 }
 
 bool MeasureFluorescenceFunction::inWorkingRange(int nargs, va_list args) throw(std::invalid_argument) {
-    if (!fluorescenceSensoPlugin) {
-        fluorescenceSensoPlugin = factory->makeFluorescenceSensor(configurationObj);
-    }
-
     if (nargs == 2) {
         units::Length excitation = va_arg(args, units::Length);
         units::Length emission = va_arg(args, units::Length);
 
-        return fluorescenceSensoPlugin->inWorkingRange(excitation, emission);
+        return (((excitation >= minExcitation) && (excitation <= maxExcitation)) &&
+                ((emission >= minEmission) && (emission <= maxEmission)));
     } else {
         throw(std::invalid_argument(" inWorkingRange() of MeasureFluorescenceFunction must receive 2 argument, received " + std::to_string(nargs)));
     }

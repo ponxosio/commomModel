@@ -1,9 +1,16 @@
 #include "pumppluginfunction.h"
 
-PumpPluginFunction::PumpPluginFunction(std::shared_ptr<PluginAbstractFactory> factory, const PluginConfiguration & configuration) :
-    Function(factory), configurationObj(configuration)
+PumpPluginFunction::PumpPluginFunction(
+        std::shared_ptr<PluginAbstractFactory> factory,
+        const PluginConfiguration & configuration,
+        units::Volumetric_Flow minRate,
+        units::Volumetric_Flow maxRate) :
+    Function(factory)
 {
+    this->minRate = minRate;
+    this->maxRate = maxRate;
 
+    configurationObj = std::make_shared<PluginConfiguration>(configuration);
 }
 
 PumpPluginFunction::~PumpPluginFunction() {
@@ -15,13 +22,9 @@ Function::OperationType PumpPluginFunction::getAceptedOp() {
 }
 
 bool PumpPluginFunction::inWorkingRange(int nargs, va_list args) throw(std::invalid_argument) {
-    if (!pluginPump) {
-        pluginPump = factory->makePump(configurationObj);
-    }
-
     if (nargs == 1) {
         units::Volumetric_Flow rate = va_arg(args, units::Volumetric_Flow);
-        return pluginPump->inWorkingRange(rate);
+        return ((rate >= minRate) && (rate <= maxRate));
     } else {
         throw(std::invalid_argument(" inWorkingRange() of PumpPluginFunction must receive 1 arguments, received " + std::to_string(nargs)));
     }
@@ -48,5 +51,5 @@ std::shared_ptr<MultiUnitsWrapper> PumpPluginFunction::doOperation(int nargs, va
 }
 
 units::Volume PumpPluginFunction::getMinVolume() {
-    return 0.0;
+    return 0.0 * units::l;
 }

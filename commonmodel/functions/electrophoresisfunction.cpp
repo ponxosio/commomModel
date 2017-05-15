@@ -3,11 +3,16 @@
 ElectrophoresisFunction::ElectrophoresisFunction(
         std::shared_ptr<PluginAbstractFactory> factory,
         const PluginConfiguration & configuration,
-        double minVolume) :
-    configurationObj(configuration)
+        units::Volume minVolume,
+        units::ElectricField minEField,
+        units::ElectricField maxEField) :
+    Function(factory)
 {
-    this->factory = factory;
     this->minVolume = minVolume;
+    this->minEField = minEField;
+    this->maxEField = maxEField;
+
+    configurationObj = std::make_shared<PluginConfiguration>(configuration);
 }
 
 ElectrophoresisFunction::~ElectrophoresisFunction() {
@@ -19,13 +24,9 @@ Function::OperationType ElectrophoresisFunction::getAceptedOp() {
 }
 
 bool ElectrophoresisFunction::inWorkingRange(int nargs, va_list args) throw(std::invalid_argument) {
-    if (!electrophoresisPlugin) {
-        electrophoresisPlugin = factory->makeElectrophorer(configurationObj);
-    }
-
     if (nargs == 1) {
         units::ElectricField eField = va_arg(args, units::ElectricField);
-        return electrophoresisPlugin->inWorkingRange(eField);
+        return ((eField >= minEField) && (eField <= maxEField));
     } else {
         throw(std::invalid_argument(" inWorkingRange() of ElectrophoresisFunction must receive 1 argument, received " + std::to_string(nargs)));
     }

@@ -3,11 +3,12 @@
 MeasureTemperatureFunction::MeasureTemperatureFunction(
         std::shared_ptr<PluginAbstractFactory> factory,
         const PluginConfiguration & configuration,
-        double minVolume) :
-    configurationObj(configuration)
+        units::Volume minVolume) :
+    Function(factory)
 {
     this->minVolume = minVolume;
-    this->factory = factory;
+
+    configurationObj = std::make_shared<PluginConfiguration>(configuration);
 }
 
 MeasureTemperatureFunction::~MeasureTemperatureFunction() {

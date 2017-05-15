@@ -3,11 +3,16 @@
 ShakeFunction::ShakeFunction(
         std::shared_ptr<PluginAbstractFactory> factory,
         const PluginConfiguration & configuration,
-        double minVolume) :
-    configurationObj(configuration)
+        units::Volume minVolume,
+        units::Frequency minIntensity,
+        units::Frequency maxIntensity) :
+    Function(factory)
 {
-    this->factory = factory;
     this->minVolume = minVolume;
+    this->minIntensity = minIntensity;
+    this->maxIntensity = maxIntensity;
+
+    configurationObj = std::make_shared<PluginConfiguration>(configuration);
 }
 
 ShakeFunction::~ShakeFunction() {
@@ -19,13 +24,9 @@ Function::OperationType ShakeFunction::getAceptedOp() {
 }
 
 bool ShakeFunction::inWorkingRange(int nargs, va_list args) throw(std::invalid_argument) {
-    if (!shakePlugin) {
-        shakePlugin = factory->makeShaker(configurationObj);
-    }
-
     if (nargs == 1) {
         units::Frequency intensity = va_arg(args, units::Frequency);
-        return shakePlugin->inWorkingRange(intensity);
+        return ((intensity >= minIntensity) && (intensity <= maxIntensity));
     } else {
         throw(std::invalid_argument(" inWorkingRange() of ShakePluginFunction must receive 1 argument, received " + std::to_string(nargs)));
     }

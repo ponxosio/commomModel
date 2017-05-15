@@ -15,7 +15,11 @@
 class CentrifugateFunction : public Function
 {
 public:
-    CentrifugateFunction(std::shared_ptr<PluginAbstractFactory> factory, const PluginConfiguration & configuration, double minVolume);
+    CentrifugateFunction(std::shared_ptr<PluginAbstractFactory> factory,
+                         const PluginConfiguration & configuration,
+                         units::Volume minVolume,
+                         units::Frequency minIntensity,
+                         units::Frequency maxIntensity);
     virtual ~CentrifugateFunction();
 
     virtual OperationType getAceptedOp();
@@ -24,8 +28,11 @@ public:
     virtual units::Volume getMinVolume();
 
 protected:
-    double minVolume;
-    PluginConfiguration configurationObj;
+    units::Volume minVolume;
+    units::Frequency minIntensity;
+    units::Frequency maxIntensity;
+
+    std::shared_ptr<PluginConfiguration> configurationObj;
     std::shared_ptr<CentrifugatePluginProduct> centrifugatePlugin;
 };
 

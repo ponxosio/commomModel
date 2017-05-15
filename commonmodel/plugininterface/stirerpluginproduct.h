@@ -11,7 +11,6 @@ public:
 
     virtual void stir(units::Frequency intensity) = 0;
     virtual void turnOff() = 0;
-    virtual bool inWorkingRange(units::Frequency value2check) = 0;
 };
 
 #endif // STIRERPLUGINPRODUCT_H

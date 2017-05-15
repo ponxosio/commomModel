@@ -12,8 +12,7 @@ public:
     virtual ~ElectrophoresisPluginProduct(){}
 
     virtual void startElectrophoresis(units::ElectricField fieldStrenght) = 0;
-    virtual std::shared_ptr<ElectrophoresisResult> stopElectrophpresis() = 0;
-    virtual bool inWorkingRange(units::ElectricField fieldStrenght) = 0;
+    virtual std::shared_ptr<ElectrophoresisResult> stopElectrophpresis() = 0;    
 };
 
 #endif // ELECTROPHORESISPLUGINPRODUCT_H

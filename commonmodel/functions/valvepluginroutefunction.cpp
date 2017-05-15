@@ -1,9 +1,9 @@
 #include "valvepluginroutefunction.h"
 
 ValvePluginRouteFunction::ValvePluginRouteFunction(std::shared_ptr<PluginAbstractFactory> factory, const PluginConfiguration & configuration) :
-    Function(factory), configurationObj(configuration)
+    Function(factory)
 {
-
+    configurationObj = std::make_shared<PluginConfiguration>(configuration);
 }
 
 ValvePluginRouteFunction::~ValvePluginRouteFunction() {
@@ -22,7 +22,7 @@ bool ValvePluginRouteFunction::inWorkingRange(int nargs, va_list args) throw(std
     }
 }
 
-MultiUnitsWrapper* ValvePluginRouteFunction::doOperation(int nargs, va_list args) throw (std::invalid_argument) {
+std::shared_ptr<MultiUnitsWrapper> ValvePluginRouteFunction::doOperation(int nargs, va_list args) throw (std::invalid_argument) {
     if (!valvePlugin) {
         valvePlugin = factory->makeValve(configurationObj);
     }
@@ -42,6 +42,6 @@ MultiUnitsWrapper* ValvePluginRouteFunction::doOperation(int nargs, va_list args
 }
 
 units::Volume ValvePluginRouteFunction::getMinVolume() {
-    return 0.0;
+    return 0.0 * units::l;
 }
 

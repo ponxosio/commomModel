@@ -14,7 +14,7 @@
 class MEASURETEMPERATUREFUNCTION_EXPORT MeasureTemperatureFunction : public Function
 {
 public:
-    MeasureTemperatureFunction(std::shared_ptr<PluginAbstractFactory> factory, const PluginConfiguration & configuration, double minVolume);
+    MeasureTemperatureFunction(std::shared_ptr<PluginAbstractFactory> factory, const PluginConfiguration & configuration, units::Volume minVolume);
     virtual ~MeasureTemperatureFunction();
 
     virtual OperationType getAceptedOp();
@@ -23,8 +23,8 @@ public:
     virtual units::Volume getMinVolume();
 
 protected:
-    double minVolume;
-    PluginConfiguration configurationObj;
+    units::Volume minVolume;
+    std::shared_ptr<PluginConfiguration> configurationObj;
     std::shared_ptr<TemperatureSensorProduct> temperatureSensorPlugin;
 };
 

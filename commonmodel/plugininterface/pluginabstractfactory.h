@@ -22,23 +22,23 @@ class PluginAbstractFactory {
 public:
     virtual ~PluginAbstractFactory(){}
 
-    virtual std::shared_ptr<HeaterPluginProduct> makeHeater(const PluginConfiguration & configuration) = 0;
-    virtual std::shared_ptr<LightPluginProduct> makeLight(const PluginConfiguration & configuration) = 0;
+    virtual std::shared_ptr<HeaterPluginProduct> makeHeater(std::shared_ptr<PluginConfiguration> configuration) = 0;
+    virtual std::shared_ptr<LightPluginProduct> makeLight(std::shared_ptr<PluginConfiguration> configuration) = 0;
 
-    virtual std::shared_ptr<StirerPluginProduct> makeStirer(const PluginConfiguration & configuration) = 0;
-    virtual std::shared_ptr<ShakePluginProduct> makeShaker(const PluginConfiguration & configuration) = 0;
-    virtual std::shared_ptr<CentrifugatePluginProduct> makeCentrifugate(const PluginConfiguration & configuration) = 0;
+    virtual std::shared_ptr<StirerPluginProduct> makeStirer(std::shared_ptr<PluginConfiguration> configuration) = 0;
+    virtual std::shared_ptr<ShakePluginProduct> makeShaker(std::shared_ptr<PluginConfiguration> configuration) = 0;
+    virtual std::shared_ptr<CentrifugatePluginProduct> makeCentrifugate(std::shared_ptr<PluginConfiguration> configuration) = 0;
 
-    virtual std::shared_ptr<ElectrophoresisPluginProduct> makeElectrophorer(const PluginConfiguration & configuration) = 0;
+    virtual std::shared_ptr<ElectrophoresisPluginProduct> makeElectrophorer(std::shared_ptr<PluginConfiguration> configuration) = 0;
 
-    virtual std::shared_ptr<OdSensorPluginProduct> makeOdSensor(const PluginConfiguration & configuration) = 0;
-    virtual std::shared_ptr<TemperatureSensorProduct> makeTemperatureSensor(const PluginConfiguration & configuration) = 0;
-    virtual std::shared_ptr<LuminiscenceSensorProduct> makeLuminiscenseSensor(const PluginConfiguration & configuration) = 0;
-    virtual std::shared_ptr<FluorescenceSensorProduct> makeFluorescenceSensor(const PluginConfiguration & configuration) = 0;
-    virtual std::shared_ptr<VolumeSensorProduct> makeVolumeSensor(const PluginConfiguration & configuration) = 0;
+    virtual std::shared_ptr<OdSensorPluginProduct> makeOdSensor(std::shared_ptr<PluginConfiguration> configuration) = 0;
+    virtual std::shared_ptr<TemperatureSensorProduct> makeTemperatureSensor(std::shared_ptr<PluginConfiguration> configuration) = 0;
+    virtual std::shared_ptr<LuminiscenceSensorProduct> makeLuminiscenseSensor(std::shared_ptr<PluginConfiguration> configuration) = 0;
+    virtual std::shared_ptr<FluorescenceSensorProduct> makeFluorescenceSensor(std::shared_ptr<PluginConfiguration> configuration) = 0;
+    virtual std::shared_ptr<VolumeSensorProduct> makeVolumeSensor(std::shared_ptr<PluginConfiguration> configuration) = 0;
 
-    virtual std::shared_ptr<PumpPluginProduct> makePump(const PluginConfiguration & configuration) = 0;
-    virtual std::shared_ptr<ValvePluginProduct> makeValve(const PluginConfiguration & configuration) = 0;
+    virtual std::shared_ptr<PumpPluginProduct> makePump(std::shared_ptr<PluginConfiguration> configuration) = 0;
+    virtual std::shared_ptr<ValvePluginProduct> makeValve(std::shared_ptr<PluginConfiguration> configuration) = 0;
 
 };
 

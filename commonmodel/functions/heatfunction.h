@@ -16,7 +16,11 @@
 class HEATFUNCTION_EXPORT HeatFunction : public Function
 {
 public:
-    HeatFunction(std::shared_ptr<PluginAbstractFactory> factory, const PluginConfiguration & configuration, double minVolume);
+    HeatFunction(std::shared_ptr<PluginAbstractFactory> factory,
+                 const PluginConfiguration & configuration,
+                 units::Volume minVolume,
+                 units::Temperature minTemperature,
+                 units::Temperature maxTemperature);
     virtual ~HeatFunction();
 
     virtual OperationType getAceptedOp();
@@ -25,8 +29,11 @@ public:
     virtual units::Volume getMinVolume();
 
 protected:
-    double minVolume;
-    PluginConfiguration configurationObj;
+    units::Volume minVolume;
+    units::Temperature minTemperature;
+    units::Temperature maxTemperature;
+
+    std::shared_ptr<PluginConfiguration> configurationObj;
     std::shared_ptr<HeaterPluginProduct> heaterPlugin;
 };
 

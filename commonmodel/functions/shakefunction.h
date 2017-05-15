@@ -14,7 +14,11 @@
 class ShakeFunction : public Function
 {
 public:
-    ShakeFunction(std::shared_ptr<PluginAbstractFactory> factory, const PluginConfiguration & configuration, double minVolume);
+    ShakeFunction(std::shared_ptr<PluginAbstractFactory> factory,
+                  const PluginConfiguration & configuration,
+                  units::Volume minVolume,
+                  units::Frequency minIntensity,
+                  units::Frequency maxIntensity);
     virtual ~ShakeFunction();
 
     virtual OperationType getAceptedOp();
@@ -23,8 +27,11 @@ public:
     virtual units::Volume getMinVolume();
 
 protected:
-    double minVolume;
-    PluginConfiguration configurationObj;
+    units::Volume minVolume;
+    units::Frequency minIntensity;
+    units::Frequency maxIntensity;
+
+    std::shared_ptr<PluginConfiguration> configurationObj;
     std::shared_ptr<ShakePluginProduct> shakePlugin;
 };
 

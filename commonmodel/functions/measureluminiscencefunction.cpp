@@ -3,11 +3,12 @@
 MeasureLuminiscenceFunction::MeasureLuminiscenceFunction(
         std::shared_ptr<PluginAbstractFactory> factory,
         const PluginConfiguration & configuration,
-        double minVolume) :
-    configurationObj(configuration)
+        units::Volume minVolume) :
+    Function(factory)
 {
-    this->factory = factory;
     this->minVolume = minVolume;
+
+    configurationObj = std::make_shared<PluginConfiguration>(configuration);
 }
 
 MeasureLuminiscenceFunction::~MeasureLuminiscenceFunction() {

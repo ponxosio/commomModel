@@ -1,13 +1,6 @@
 #ifndef FUNCTIONSET_H
 #define FUNCTIONSET_H
 
-#define ROUTE_FLAG 1
-#define PUMP_FLAG 2
-#define HEAT_FLAG 4
-#define LIGHT_FLAG 8
-#define MEASUREOD_FLAG 16
-#define STIR_FLAG 32
-
 #include <bitset>
 #include <unordered_map>
 #include <memory>

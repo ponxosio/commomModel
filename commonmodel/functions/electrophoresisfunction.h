@@ -14,7 +14,11 @@
 class ElectrophoresisFunction : public Function
 {
 public:
-    ElectrophoresisFunction(std::shared_ptr<PluginAbstractFactory> factory, const PluginConfiguration & configuration, double minVolume);
+    ElectrophoresisFunction(std::shared_ptr<PluginAbstractFactory> factory,
+                            const PluginConfiguration & configuration,
+                            units::Volume minVolume,
+                            units::ElectricField minEField,
+                            units::ElectricField maxEField);
     virtual ~ElectrophoresisFunction();
 
     virtual OperationType getAceptedOp();
@@ -23,8 +27,11 @@ public:
     virtual units::Volume getMinVolume();
 
 protected:
-    double minVolume;
-    PluginConfiguration configurationObj;
+    units::Volume minVolume;
+    units::ElectricField minEField;
+    units::ElectricField maxEField;
+
+    std::shared_ptr<PluginConfiguration> configurationObj;
     std::shared_ptr<ElectrophoresisPluginProduct> electrophoresisPlugin;
 };
 

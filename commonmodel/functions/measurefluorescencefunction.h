@@ -14,7 +14,13 @@
 class MeasureFluorescenceFunction : public Function
 {
 public:
-    MeasureFluorescenceFunction(std::shared_ptr<PluginAbstractFactory> factory, const PluginConfiguration & configuration, double minVolume);
+    MeasureFluorescenceFunction(std::shared_ptr<PluginAbstractFactory> factory,
+                                const PluginConfiguration & configuration,
+                                units::Volume minVolume,
+                                units::Length minEmission,
+                                units::Length maxEmission,
+                                units::Length minExcitation,
+                                units::Length maxExcitation);
     virtual ~MeasureFluorescenceFunction();
 
     virtual OperationType getAceptedOp();
@@ -23,8 +29,13 @@ public:
     virtual units::Volume getMinVolume();
 
 protected:
-    double minVolume;
-    PluginConfiguration configurationObj;
+    units::Volume minVolume;
+    units::Length minEmission;
+    units::Length maxEmission;
+    units::Length minExcitation;
+    units::Length maxExcitation;
+
+    std::shared_ptr<PluginConfiguration> configurationObj;
     std::shared_ptr<FluorescenceSensorProduct> fluorescenceSensoPlugin;
 };
 

@@ -22,7 +22,7 @@ public:
     virtual units::Volume getMinVolume();
 
 protected:
-    PluginConfiguration configurationObj;
+    std::shared_ptr<PluginConfiguration> configurationObj;
     std::shared_ptr<ValvePluginProduct> valvePlugin;
 };
 

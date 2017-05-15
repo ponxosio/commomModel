@@ -1,9 +1,18 @@
 #include "stirfunction.h"
 
-StirFunction::StirFunction(std::shared_ptr<PluginAbstractFactory> factory, const PluginConfiguration & configuration, double minVolume) :
-    Function(factory), configurationObj(configuration)
+StirFunction::StirFunction(
+        std::shared_ptr<PluginAbstractFactory> factory,
+        const PluginConfiguration & configuration,
+        units::Volume minVolume,
+        units::Frequency minIntensity,
+        units::Frequency maxIntensity) :
+    Function(factory)
 {
     this->minVolume = minVolume;
+    this->minIntensity = minIntensity;
+    this->maxIntensity = maxIntensity;
+
+    configurationObj = std::make_shared<PluginConfiguration>(configuration);
 }
 
 StirFunction::~StirFunction() {
@@ -15,13 +24,9 @@ Function::OperationType StirFunction::getAceptedOp() {
 }
 
 bool StirFunction::inWorkingRange(int nargs, va_list args) throw(std::invalid_argument) {
-    if (!stirPlugin) {
-        stirPlugin = factory->makeStirer(configurationObj);
-    }
-
     if (nargs == 1) {
         units::Frequency intensity = va_arg(args, units::Frequency);
-        return stirPlugin->inWorkingRange(intensity);
+        return ((intensity >= minIntensity) && (intensity <= maxIntensity));
     } else {
         throw(std::invalid_argument(" inWorkingRange() of StirFunction must receive 1 argument, received " + std::to_string(nargs)));
     }
