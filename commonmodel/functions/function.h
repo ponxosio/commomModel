@@ -2,6 +2,7 @@
 #define FUNCTION_H
 
 #include <cstdarg>
+#include <memory>
 #include <stdexcept>
 
 #include <utils/units.h>
@@ -18,7 +19,15 @@ public:
         heat,
         apply_light,
         measure_od,
-        stir
+        stir,
+        centrifugate,
+        shake,
+        electrophoresis,
+        measure_temperature,
+        measure_luminiscence,
+        measure_fluorescence,
+        measure_volume,
+        MAX_OPERATION_TYPE = measure_volume + 1 //ALWAYS EQUALS TO THE SECOND-TO-LAST TYPE PLUS ONE
     } OperationType;
 
     Function(std::shared_ptr<PluginAbstractFactory> factory) {
@@ -27,8 +36,9 @@ public:
     virtual ~Function(){}
 
     virtual OperationType getAceptedOp() = 0;
-    virtual MultiUnitsWrapper* doOperation(int nargs, va_list args) throw(std::invalid_argument) = 0;
+    virtual std::shared_ptr<MultiUnitsWrapper> doOperation(int nargs, va_list args) throw(std::invalid_argument) = 0;
     virtual units::Volume getMinVolume() = 0;
+    virtual bool inWorkingRange(int nargs, va_list args) throw(std::invalid_argument) = 0;
 
     inline void setFactory(std::shared_ptr<PluginAbstractFactory> factory) {
         this->factory = factory;

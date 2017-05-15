@@ -18,6 +18,7 @@ public:
     virtual ~ComponentInterface(){}
 
     virtual bool canDoOperations(unsigned long mask) = 0;
+    virtual bool inWorkingRange(Function::OperationType op, int nargs, ...) throw (std::invalid_argument) = 0;
     virtual MultiUnitsWrapper* doOperation(Function::OperationType op, int nargs, ...) throw (std::invalid_argument) = 0;
     virtual units::Volume getMinVolume(Function::OperationType op) throw (std::invalid_argument) = 0;
 

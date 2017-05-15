@@ -22,13 +22,25 @@ bool FunctionSet::canDoOperations(unsigned long mask) {
     return ((mask & posibleops) == mask);
 }
 
-MultiUnitsWrapper* FunctionSet::doOperation(Function::OperationType op, int nargs, va_list args) throw (std::invalid_argument) {
+std::shared_ptr<MultiUnitsWrapper> FunctionSet::doOperation(Function::OperationType op, int nargs, va_list args) throw (std::invalid_argument) {
     int castop = (int) op;
 
     auto it = functionsMap.find(castop);
     if (it != functionsMap.end()) {
         std::shared_ptr<Function> function = it->second;
         return function->doOperation(nargs, args);
+    } else {
+        throw(std::invalid_argument("funtion " + std::to_string((int) op) + " not present"));
+    }
+}
+
+bool FunctionSet::inWorkingRange(Function::OperationType op, int nargs, va_list args) throw(std::invalid_argument) {
+    int castop = (int) op;
+
+    auto it = functionsMap.find(castop);
+    if (it != functionsMap.end()) {
+        std::shared_ptr<Function> function = it->second;
+        return function->inWorkingRange(nargs, args);
     } else {
         throw(std::invalid_argument("funtion " + std::to_string((int) op) + " not present"));
     }

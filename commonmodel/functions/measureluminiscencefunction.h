@@ -1,21 +1,21 @@
-#ifndef STIRFUNCTION_H
-#define STIRFUNCTION_H
+#ifndef MEASURELUMINISCENCEFUNCTION_H
+#define MEASURELUMINISCENCEFUNCTION_H
 
 #include <memory>
 #include <cstdarg>
 
-#include "commonmodel/functions/function.h"
 #include "commonmodel/plugininterface/pluginabstractfactory.h"
 #include "commonmodel/plugininterface/pluginconfiguration.h"
-#include "commonmodel/plugininterface/stirerpluginproduct.h"
+#include "commonmodel/plugininterface/luminiscencesensorproduct.h"
+#include "commonmodel/functions/function.h"
 
 #include "commonmodel/commommodel_global.h"
 
-class STIRFUNCTION_EXPORT StirFunction : public Function
+class MEASURELUMINISCENCEFUNCTION_EXPORT MeasureLuminiscenceFunction: public Function
 {
 public:
-    StirFunction(std::shared_ptr<PluginAbstractFactory> factory, const PluginConfiguration & configuration, double minVolume);
-    virtual ~StirFunction();
+    MeasureLuminiscenceFunction(std::shared_ptr<PluginAbstractFactory> factory, const PluginConfiguration & configuration, double minVolume);
+    virtual ~MeasureLuminiscenceFunction();
 
     virtual OperationType getAceptedOp();
     virtual bool inWorkingRange(int nargs, va_list args) throw(std::invalid_argument);
@@ -25,7 +25,8 @@ public:
 protected:
     double minVolume;
     PluginConfiguration configurationObj;
-    std::shared_ptr<StirerPluginProduct> stirPlugin;
+    std::shared_ptr<LuminiscenceSensorProduct> luminiscenceSensoPlugin;
+
 };
 
-#endif // STIRFUNCTION_H
+#endif // MEASURELUMINISCENCEFUNCTION_H

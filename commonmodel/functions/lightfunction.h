@@ -20,7 +20,8 @@ public:
     virtual ~LightFunction();
 
     virtual OperationType getAceptedOp();
-    virtual MultiUnitsWrapper* doOperation(int nargs, va_list args) throw (std::invalid_argument);
+    virtual bool inWorkingRange(int nargs, va_list args) throw(std::invalid_argument) = 0;
+    virtual std::shared_ptr<MultiUnitsWrapper> doOperation(int nargs, va_list args) throw (std::invalid_argument);
     virtual units::Volume getMinVolume();
 
 protected:

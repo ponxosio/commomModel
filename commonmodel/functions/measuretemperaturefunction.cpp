@@ -1,0 +1,51 @@
+#include "measuretemperaturefunction.h"
+
+MeasureTemperatureFunction::MeasureTemperatureFunction(
+        std::shared_ptr<PluginAbstractFactory> factory,
+        const PluginConfiguration & configuration,
+        double minVolume) :
+    configurationObj(configuration)
+{
+    this->minVolume = minVolume;
+    this->factory = factory;
+}
+
+MeasureTemperatureFunction::~MeasureTemperatureFunction() {
+
+}
+
+Function::OperationType MeasureTemperatureFunction::getAceptedOp() {
+    return Function::measure_temperature;
+}
+
+bool MeasureTemperatureFunction::inWorkingRange(int nargs, va_list args) throw(std::invalid_argument) {
+    if (nargs == 0) {
+        return true;
+    } else {
+        throw(std::invalid_argument(" inWorkingRange() of MeasureTemperatureFunction must receive 0 argument, received " + std::to_string(nargs)));
+    }
+}
+
+std::shared_ptr<MultiUnitsWrapper> MeasureTemperatureFunction::doOperation(int nargs, va_list args) throw (std::invalid_argument) {
+    if (!temperatureSensorPlugin) {
+        temperatureSensorPlugin = factory->makeTemperatureSensor(configurationObj);
+    }
+
+    if (nargs == 1) { //start measurement
+        //va_start(args, nargs);
+        //va_end(args);
+        units::Frequency measurementFrequency = va_arg(args, units::Frequency);
+        temperatureSensorPlugin->startMeasureTemperature(measurementFrequency);
+        return NULL;
+    } else if (nargs == 0) { //get measure value
+        std::shared_ptr<MultiUnitsWrapper> valueRead = std::make_shared<MultiUnitsWrapper>();
+        valueRead->setTemperature(temperatureSensorPlugin->getTemperatureMeasurement());
+        return valueRead;
+    } else {
+        throw(std::invalid_argument(" doOperation() of MeasureTemperatureFunction must receive 1 or 0 argument, received " + std::to_string(nargs)));
+    }
+}
+
+units::Volume MeasureTemperatureFunction::getMinVolume() {
+    return minVolume;
+}
