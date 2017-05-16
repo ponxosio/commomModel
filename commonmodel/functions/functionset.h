@@ -1,13 +1,6 @@
 #ifndef FUNCTIONSET_H
 #define FUNCTIONSET_H
 
-#define ROUTE_FLAG 1
-#define PUMP_FLAG 2
-#define HEAT_FLAG 4
-#define LIGHT_FLAG 8
-#define MEASUREOD_FLAG 16
-#define STIR_FLAG 32
-
 #include <bitset>
 #include <unordered_map>
 #include <memory>
@@ -25,6 +18,10 @@
 class FUNCTIONSET_EXPORT FunctionSet
 {
 public:
+    typedef std::unordered_map<Function::OperationType,unsigned long, Function::OperationTypeHash> FlagMap;
+
+    static const FlagMap FUNCTIONS_FLAG_MAP;
+
     FunctionSet();
     FunctionSet(const FunctionSet & set);
     virtual ~FunctionSet();
@@ -37,8 +34,17 @@ public:
     void setFactory(std::shared_ptr<PluginAbstractFactory> factory);
     void setFactory(Function::OperationType op, std::shared_ptr<PluginAbstractFactory> factory) throw(std::invalid_argument);
 
+    inline unsigned long getAvailableOperations() const {
+        return aceptedFunctions.to_ulong();
+    }
+    inline const std::bitset<Function::MAX_OPTYPE> & getAceptedFunctions() const {
+        return aceptedFunctions;
+    }
+
 protected:
-    std::bitset<6> aceptedFunctions;
+    static FlagMap createFlagMap();
+
+    std::bitset<Function::MAX_OPTYPE> aceptedFunctions;
     std::unordered_map<int,std::shared_ptr<Function>> functionsMap;
 };
 

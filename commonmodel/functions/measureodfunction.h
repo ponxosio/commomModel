@@ -14,7 +14,7 @@
 class MEASUREOD_EXPORT MeasureOdFunction : public Function
 {
 public:
-    MeasureOdFunction(std::shared_ptr<PluginAbstractFactory> factory, const PluginConfiguration & configuration, double minVolume);
+    MeasureOdFunction(std::shared_ptr<PluginAbstractFactory> factory, const PluginConfiguration & configuration, units::Volume minVolume);
     virtual ~MeasureOdFunction();
 
     virtual OperationType getAceptedOp();
@@ -22,7 +22,7 @@ public:
     virtual units::Volume getMinVolume();
 
 protected:
-    double minVolume;
+    units::Volume minVolume;
     PluginConfiguration configurationObj;
     std::shared_ptr<OdSensorPluginProduct> odSensoPlugin;
 };

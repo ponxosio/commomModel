@@ -18,8 +18,19 @@ public:
         heat,
         apply_light,
         measure_od,
-        stir
+        measure_temperature,
+        measure_luminousIntensity,
+        measure_fluorescence,
+        measure_volume,
+        stir,
+        MAX_OPTYPE = stir + 1
     } OperationType;
+
+    typedef struct _OperationTypeHash {
+        size_t operator()(OperationType x) const throw () {
+            return ((size_t)x);
+        }
+    }OperationTypeHash;
 
     Function(std::shared_ptr<PluginAbstractFactory> factory) {
         this->factory = factory;

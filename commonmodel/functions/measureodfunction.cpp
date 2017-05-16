@@ -1,6 +1,9 @@
 #include "measureodfunction.h"
 
-MeasureOdFunction::MeasureOdFunction(std::shared_ptr<PluginAbstractFactory> factory, const PluginConfiguration & configuration, double minVolume) :
+MeasureOdFunction::MeasureOdFunction(
+        std::shared_ptr<PluginAbstractFactory> factory,
+        const PluginConfiguration & configuration,
+        units::Volume minVolume) :
     Function(factory), configurationObj(configuration)
 {
     this->minVolume = minVolume;

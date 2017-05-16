@@ -1,5 +1,16 @@
 #include "functionset.h"
 
+const FunctionSet::FlagMap FunctionSet::FUNCTIONS_FLAG_MAP = createFlagMap();
+
+FunctionSet::FlagMap FunctionSet::createFlagMap() {
+    FlagMap functionsMap;
+    for(int i = 0; i < (Function::MAX_OPTYPE - 1); i++) {
+        unsigned long flagValue = 1 << i;
+        functionsMap.insert(std::make_pair((Function::OperationType) i, flagValue));
+    }
+    return functionsMap;
+}
+
 FunctionSet::FunctionSet()
 {
 
