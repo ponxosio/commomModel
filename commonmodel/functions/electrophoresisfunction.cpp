@@ -4,13 +4,11 @@ ElectrophoresisFunction::ElectrophoresisFunction(
         std::shared_ptr<PluginAbstractFactory> factory,
         const PluginConfiguration & configuration,
         units::Volume minVolume,
-        units::ElectricField minEField,
-        units::ElectricField maxEField) :
+        const ElectrophoresisWorkingRange & workingRange) :
     Function(factory)
 {
     this->minVolume = minVolume;
-    this->minEField = minEField;
-    this->maxEField = maxEField;
+    this->workingRange = std::make_shared<ElectrophoresisWorkingRange>(workingRange);
 
     configurationObj = std::make_shared<PluginConfiguration>(configuration);
 }
@@ -19,17 +17,21 @@ ElectrophoresisFunction::~ElectrophoresisFunction() {
 
 }
 
-Function::OperationType ElectrophoresisFunction::getAceptedOp() {
+Function::OperationType ElectrophoresisFunction::getAceptedOp() const {
     return electrophoresis;
 }
 
-bool ElectrophoresisFunction::inWorkingRange(int nargs, va_list args) throw(std::invalid_argument) {
+bool ElectrophoresisFunction::inWorkingRange(int nargs, va_list args) const throw(std::invalid_argument) {
     if (nargs == 1) {
         units::ElectricField eField = va_arg(args, units::ElectricField);
-        return ((eField >= minEField) && (eField <= maxEField));
+        return workingRange->inWorkingRange(eField);
     } else {
         throw(std::invalid_argument(" inWorkingRange() of ElectrophoresisFunction must receive 1 argument, received " + std::to_string(nargs)));
     }
+}
+
+const std::shared_ptr<const ComparableRangeInterface> ElectrophoresisFunction::getComparableWorkingRange() const {
+    return workingRange;
 }
 
 std::shared_ptr<MultiUnitsWrapper> ElectrophoresisFunction::doOperation(int nargs, va_list args) throw (std::invalid_argument) {
@@ -50,6 +52,6 @@ std::shared_ptr<MultiUnitsWrapper> ElectrophoresisFunction::doOperation(int narg
     }
 }
 
-units::Volume ElectrophoresisFunction::getMinVolume() {
+units::Volume ElectrophoresisFunction::getMinVolume() const {
     return minVolume;
 }

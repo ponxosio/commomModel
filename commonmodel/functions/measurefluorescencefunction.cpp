@@ -4,17 +4,11 @@ MeasureFluorescenceFunction::MeasureFluorescenceFunction(
         std::shared_ptr<PluginAbstractFactory> factory,
         const PluginConfiguration & configuration,
         units::Volume minVolume,
-        units::Length minEmission,
-        units::Length maxEmission,
-        units::Length minExcitation,
-        units::Length maxExcitation) :
+        const MeasureFluorescenceWorkingRange & workingRange) :
     Function(factory)
 {
     this->minVolume = minVolume;
-    this->minEmission = minEmission;
-    this->maxEmission = maxEmission;
-    this->minExcitation = minExcitation;
-    this->maxExcitation = maxExcitation;
+    this->workingRange = std::make_shared<MeasureFluorescenceWorkingRange>(workingRange);
 
     configurationObj = std::make_shared<PluginConfiguration>(configuration);
 }
@@ -23,20 +17,23 @@ MeasureFluorescenceFunction::~MeasureFluorescenceFunction() {
 
 }
 
-Function::OperationType MeasureFluorescenceFunction::getAceptedOp() {
+Function::OperationType MeasureFluorescenceFunction::getAceptedOp() const {
     return measure_fluorescence;
 }
 
-bool MeasureFluorescenceFunction::inWorkingRange(int nargs, va_list args) throw(std::invalid_argument) {
+bool MeasureFluorescenceFunction::inWorkingRange(int nargs, va_list args) const throw(std::invalid_argument) {
     if (nargs == 2) {
         units::Length excitation = va_arg(args, units::Length);
         units::Length emission = va_arg(args, units::Length);
 
-        return (((excitation >= minExcitation) && (excitation <= maxExcitation)) &&
-                ((emission >= minEmission) && (emission <= maxEmission)));
+        return workingRange->inWorkingRange(emission, excitation);
     } else {
         throw(std::invalid_argument(" inWorkingRange() of MeasureFluorescenceFunction must receive 2 argument, received " + std::to_string(nargs)));
     }
+}
+
+const std::shared_ptr<const ComparableRangeInterface> MeasureFluorescenceFunction::getComparableWorkingRange() const {
+    return workingRange;
 }
 
 std::shared_ptr<MultiUnitsWrapper> MeasureFluorescenceFunction::doOperation(int nargs, va_list args) throw (std::invalid_argument) {
@@ -63,6 +60,6 @@ std::shared_ptr<MultiUnitsWrapper> MeasureFluorescenceFunction::doOperation(int 
     }
 }
 
-units::Volume MeasureFluorescenceFunction::getMinVolume() {
+units::Volume MeasureFluorescenceFunction::getMinVolume() const {
     return minVolume;
 }

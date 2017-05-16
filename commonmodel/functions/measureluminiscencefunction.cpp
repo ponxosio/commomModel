@@ -8,6 +8,7 @@ MeasureLuminiscenceFunction::MeasureLuminiscenceFunction(
 {
     this->minVolume = minVolume;
 
+    workingRange = std::make_shared<EmptyWorkingRange>();
     configurationObj = std::make_shared<PluginConfiguration>(configuration);
 }
 
@@ -15,16 +16,20 @@ MeasureLuminiscenceFunction::~MeasureLuminiscenceFunction() {
 
 }
 
-Function::OperationType MeasureLuminiscenceFunction::getAceptedOp() {
+Function::OperationType MeasureLuminiscenceFunction::getAceptedOp() const {
     return measure_luminiscence;
 }
 
-bool MeasureLuminiscenceFunction::inWorkingRange(int nargs, va_list args) throw(std::invalid_argument) {
+bool MeasureLuminiscenceFunction::inWorkingRange(int nargs, va_list args) const throw(std::invalid_argument) {
     if (nargs == 0) {
         return true;
     } else {
         throw(std::invalid_argument(" inWorkingRange() of MeasureLuminiscenceFunction must receive 0 argument, received " + std::to_string(nargs)));
     }
+}
+
+const std::shared_ptr<const ComparableRangeInterface> MeasureLuminiscenceFunction::getComparableWorkingRange() const {
+    return workingRange;
 }
 
 std::shared_ptr<MultiUnitsWrapper> MeasureLuminiscenceFunction::doOperation(int nargs, va_list args) throw (std::invalid_argument) {
@@ -47,6 +52,6 @@ std::shared_ptr<MultiUnitsWrapper> MeasureLuminiscenceFunction::doOperation(int 
     }
 }
 
-units::Volume MeasureLuminiscenceFunction::getMinVolume() {
+units::Volume MeasureLuminiscenceFunction::getMinVolume() const {
     return minVolume;
 }

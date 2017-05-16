@@ -26,11 +26,13 @@ public:
     FunctionSet(const FunctionSet & set);
     virtual ~FunctionSet();
 
-    bool canDoOperations(unsigned long mask);
+    bool canDoOperations(unsigned long mask) const;
     std::shared_ptr<MultiUnitsWrapper> doOperation(Function::OperationType op, int nargs, va_list args) throw(std::invalid_argument);
-    bool inWorkingRange(Function::OperationType op, int nargs, va_list args) throw(std::invalid_argument);
 
-    units::Volume getMinVolume(Function::OperationType op) throw(std::invalid_argument);
+    bool inWorkingRange(Function::OperationType op, int nargs, va_list args) const throw(std::invalid_argument);
+    const std::shared_ptr<const ComparableRangeInterface> getComparableWorkingRange(Function::OperationType op) const throw(std::invalid_argument);
+
+    units::Volume getMinVolume(Function::OperationType op) const throw(std::invalid_argument);
     void addOperation(std::shared_ptr<Function> function);
 
     void setFactory(std::shared_ptr<PluginAbstractFactory> factory);

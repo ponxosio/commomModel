@@ -7,7 +7,7 @@ MeasureVolumeFunction::MeasureVolumeFunction(
     Function(factory)
 {
     this->minVolume = minVolume;
-
+    this->workingRange = std::make_shared<EmptyWorkingRange>();
     configurationObj = std::make_shared<PluginConfiguration>(configuration);
 }
 
@@ -15,16 +15,20 @@ MeasureVolumeFunction::~MeasureVolumeFunction() {
 
 }
 
-Function::OperationType MeasureVolumeFunction::getAceptedOp() {
+Function::OperationType MeasureVolumeFunction::getAceptedOp() const {
     return measure_volume;
 }
 
-bool MeasureVolumeFunction::inWorkingRange(int nargs, va_list args) throw(std::invalid_argument) {
+bool MeasureVolumeFunction::inWorkingRange(int nargs, va_list args) const throw(std::invalid_argument) {
     if (nargs == 0) {
         return true;
     } else {
         throw(std::invalid_argument(" inWorkingRange() of MeasureVolumeFunction must receive 0 argument, received " + std::to_string(nargs)));
     }
+}
+
+const std::shared_ptr<const ComparableRangeInterface> MeasureVolumeFunction::getComparableWorkingRange() const {
+    return workingRange;
 }
 
 std::shared_ptr<MultiUnitsWrapper> MeasureVolumeFunction::doOperation(int nargs, va_list args) throw (std::invalid_argument) {
@@ -47,6 +51,6 @@ std::shared_ptr<MultiUnitsWrapper> MeasureVolumeFunction::doOperation(int nargs,
     }
 }
 
-units::Volume MeasureVolumeFunction::getMinVolume() {
+units::Volume MeasureVolumeFunction::getMinVolume() const {
     return minVolume;
 }

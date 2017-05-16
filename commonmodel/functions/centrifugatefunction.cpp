@@ -4,13 +4,11 @@ CentrifugateFunction::CentrifugateFunction(
         std::shared_ptr<PluginAbstractFactory> factory,
         const PluginConfiguration & configuration,
         units::Volume minVolume,
-        units::Frequency minIntensity,
-        units::Frequency maxIntensity) :
+        const CentrifugationWorkingRange & workingRange) :
     Function(factory)
 {
     this->minVolume = minVolume;
-    this->minIntensity = minIntensity;
-    this->maxIntensity = maxIntensity;
+    this->workingRange = std::make_shared<CentrifugationWorkingRange>(workingRange);
 
     this->configurationObj = std::make_shared<PluginConfiguration>(configuration);
 }
@@ -19,17 +17,21 @@ CentrifugateFunction::~CentrifugateFunction() {
 
 }
 
-Function::OperationType CentrifugateFunction::getAceptedOp() {
+Function::OperationType CentrifugateFunction::getAceptedOp() const {
     return centrifugate;
 }
 
-bool CentrifugateFunction::inWorkingRange(int nargs, va_list args) throw(std::invalid_argument) {
+bool CentrifugateFunction::inWorkingRange(int nargs, va_list args) const throw(std::invalid_argument) {
     if (nargs == 1) {
         units::Frequency intensity = va_arg(args, units::Frequency);
-        return ((intensity >= minIntensity) && (intensity <= maxIntensity));
+        return workingRange->inWorkingRange(intensity);
     } else {
         throw(std::invalid_argument(" inWorkingRange() of CentrifugateFunction must receive 1 argument, received " + std::to_string(nargs)));
     }
+}
+
+const std::shared_ptr<const ComparableRangeInterface> CentrifugateFunction::getComparableWorkingRange() const {
+    return workingRange;
 }
 
 std::shared_ptr<MultiUnitsWrapper> CentrifugateFunction::doOperation(int nargs, va_list args) throw (std::invalid_argument) {
@@ -49,6 +51,6 @@ std::shared_ptr<MultiUnitsWrapper> CentrifugateFunction::doOperation(int nargs, 
     }
 }
 
-units::Volume CentrifugateFunction::getMinVolume() {
+units::Volume CentrifugateFunction::getMinVolume() const {
     return minVolume;
 }

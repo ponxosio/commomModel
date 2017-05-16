@@ -28,7 +28,7 @@ FunctionSet::~FunctionSet() {
 
 }
 
-bool FunctionSet::canDoOperations(unsigned long mask) {
+bool FunctionSet::canDoOperations(unsigned long mask) const {
     unsigned long posibleops = aceptedFunctions.to_ulong();
     return ((mask & posibleops) == mask);
 }
@@ -45,7 +45,7 @@ std::shared_ptr<MultiUnitsWrapper> FunctionSet::doOperation(Function::OperationT
     }
 }
 
-bool FunctionSet::inWorkingRange(Function::OperationType op, int nargs, va_list args) throw(std::invalid_argument) {
+bool FunctionSet::inWorkingRange(Function::OperationType op, int nargs, va_list args) const throw(std::invalid_argument) {
     int castop = (int) op;
 
     auto it = functionsMap.find(castop);
@@ -53,11 +53,25 @@ bool FunctionSet::inWorkingRange(Function::OperationType op, int nargs, va_list 
         std::shared_ptr<Function> function = it->second;
         return function->inWorkingRange(nargs, args);
     } else {
-        throw(std::invalid_argument("funtion " + std::to_string((int) op) + " not present"));
+        throw(std::invalid_argument("FunctionSet::inWorkingRange. Funtion " + std::to_string((int) op) + " not present"));
     }
 }
 
-units::Volume FunctionSet::getMinVolume(Function::OperationType op) throw (std::invalid_argument) {
+const std::shared_ptr<const ComparableRangeInterface> FunctionSet::getComparableWorkingRange(Function::OperationType op) const
+    throw(std::invalid_argument)
+{
+    int castop = (int) op;
+
+    auto it = functionsMap.find(castop);
+    if (it != functionsMap.end()) {
+        std::shared_ptr<Function> function = it->second;
+        return function->getComparableWorkingRange();
+    } else {
+        throw(std::invalid_argument("FunctionSet::getComparableWorkingRange. Funtion " + std::to_string((int) op) + " not present"));
+    }
+}
+
+units::Volume FunctionSet::getMinVolume(Function::OperationType op) const throw(std::invalid_argument) {
     int castop = (int) op;
 
     auto it = functionsMap.find(castop);
@@ -65,7 +79,7 @@ units::Volume FunctionSet::getMinVolume(Function::OperationType op) throw (std::
         std::shared_ptr<Function> function = it->second;
         return function->getMinVolume();
     } else {
-        throw(std::invalid_argument("funtion " + std::to_string((int) op) + " not present"));
+        throw(std::invalid_argument("FunctionSet::getMinVolume. Funtion " + std::to_string((int) op) + " not present"));
     }
 }
 

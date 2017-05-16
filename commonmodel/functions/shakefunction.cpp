@@ -4,14 +4,11 @@ ShakeFunction::ShakeFunction(
         std::shared_ptr<PluginAbstractFactory> factory,
         const PluginConfiguration & configuration,
         units::Volume minVolume,
-        units::Frequency minIntensity,
-        units::Frequency maxIntensity) :
+        const ShakeWorkingRange & workingRange) :
     Function(factory)
 {
     this->minVolume = minVolume;
-    this->minIntensity = minIntensity;
-    this->maxIntensity = maxIntensity;
-
+    this->workingRange = std::make_shared<ShakeWorkingRange>(workingRange);
     configurationObj = std::make_shared<PluginConfiguration>(configuration);
 }
 
@@ -19,17 +16,21 @@ ShakeFunction::~ShakeFunction() {
 
 }
 
-Function::OperationType ShakeFunction::getAceptedOp() {
+Function::OperationType ShakeFunction::getAceptedOp() const {
     return shake;
 }
 
-bool ShakeFunction::inWorkingRange(int nargs, va_list args) throw(std::invalid_argument) {
+bool ShakeFunction::inWorkingRange(int nargs, va_list args) const throw(std::invalid_argument) {
     if (nargs == 1) {
         units::Frequency intensity = va_arg(args, units::Frequency);
-        return ((intensity >= minIntensity) && (intensity <= maxIntensity));
+        return workingRange->inWorkingRange(intensity);
     } else {
         throw(std::invalid_argument(" inWorkingRange() of ShakePluginFunction must receive 1 argument, received " + std::to_string(nargs)));
     }
+}
+
+const std::shared_ptr<const ComparableRangeInterface> ShakeFunction::getComparableWorkingRange() const {
+    return workingRange;
 }
 
 std::shared_ptr<MultiUnitsWrapper> ShakeFunction::doOperation(int nargs, va_list args) throw (std::invalid_argument) {
@@ -49,6 +50,6 @@ std::shared_ptr<MultiUnitsWrapper> ShakeFunction::doOperation(int nargs, va_list
     }
 }
 
-units::Volume ShakeFunction::getMinVolume() {
+units::Volume ShakeFunction::getMinVolume() const {
     return minVolume;
 }

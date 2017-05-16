@@ -3,18 +3,11 @@
 LightFunction::LightFunction(
         std::shared_ptr<PluginAbstractFactory> factory,
         const PluginConfiguration & configuration,
-        units::Volume minVolume,
-        units::Length minWaveLength,
-        units::Length maxWaveLength,
-        units::LuminousIntensity minIntensity,
-        units::LuminousIntensity maxIntensity) :
+        const LigthWorkingRange & workingRange) :
     Function(factory)
 {
     this->minVolume = minVolume;
-    this->minWaveLength = minWaveLength;
-    this->maxWaveLength = maxWaveLength;
-    this->minIntensity = minIntensity;
-    this->maxIntensity = maxIntensity;
+    this->workingRange = std::make_shared<LigthWorkingRange>(workingRange);
 
     configurationObj = std::make_shared<PluginConfiguration>(configuration);
 }
@@ -23,20 +16,23 @@ LightFunction::~LightFunction() {
 
 }
 
-Function::OperationType LightFunction::getAceptedOp() {
+Function::OperationType LightFunction::getAceptedOp() const {
     return apply_light;
 }
 
-bool LightFunction::inWorkingRange(int nargs, va_list args) throw(std::invalid_argument) {
+bool LightFunction::inWorkingRange(int nargs, va_list args) const throw(std::invalid_argument) {
     if (nargs == 2) {
         units::LuminousIntensity intensity = va_arg(args, units::LuminousIntensity);
         units::Length wavelength = va_arg(args, units::Length);
 
-        return (((intensity >= minIntensity) && (intensity <= maxIntensity)) &&
-                ((wavelength >= minWaveLength && (wavelength <= minWaveLength))));
+        return workingRange->inWorkingRange(wavelength, intensity);
     } else {
         throw(std::invalid_argument(" inWorkingRange() of LightFunction must receive 2 argument, received " + std::to_string(nargs)));
     }
+}
+
+const std::shared_ptr<const ComparableRangeInterface> LightFunction::getComparableWorkingRange() const {
+    return workingRange;
 }
 
 std::shared_ptr<MultiUnitsWrapper> LightFunction::doOperation(int nargs, va_list args) throw (std::invalid_argument) {
@@ -59,6 +55,6 @@ std::shared_ptr<MultiUnitsWrapper> LightFunction::doOperation(int nargs, va_list
     }
 }
 
-units::Volume LightFunction::getMinVolume() {
+units::Volume LightFunction::getMinVolume() const {
     return minVolume;
 }

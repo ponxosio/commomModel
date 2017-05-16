@@ -4,14 +4,11 @@ HeatFunction::HeatFunction(
         std::shared_ptr<PluginAbstractFactory> factory,
         const PluginConfiguration & configuration,
         units::Volume minVolume,
-        units::Temperature minTemperature,
-        units::Temperature maxTemperature) :
+        const HeaterWorkingRange & workingRange) :
     Function(factory)
 {
     this->minVolume = minVolume;
-    this->minTemperature = minTemperature;
-    this->maxTemperature = maxTemperature;
-
+    this->workingRange = std::make_shared<HeaterWorkingRange>(workingRange);
     configurationObj = std::make_shared<PluginConfiguration>(configuration);
 }
 
@@ -19,17 +16,21 @@ HeatFunction::~HeatFunction() {
 
 }
 
-Function::OperationType HeatFunction::getAceptedOp() {
+Function::OperationType HeatFunction::getAceptedOp() const {
     return heat;
 }
 
-bool HeatFunction::inWorkingRange(int nargs, va_list args) throw(std::invalid_argument) {
+bool HeatFunction::inWorkingRange(int nargs, va_list args) const throw(std::invalid_argument) {
     if (nargs == 1) {
         units::Temperature temperature = va_arg(args, units::Temperature);
-        return ((temperature >= minTemperature) && (temperature <= maxTemperature));
+        return workingRange->inWorkingRange(temperature);
     } else {
         throw(std::invalid_argument(" inWorkingRange() of HeatFunction must receive 1 argument, received " + std::to_string(nargs)));
     }
+}
+
+const std::shared_ptr<const ComparableRangeInterface> HeatFunction::getComparableWorkingRange() const {
+    return workingRange;
 }
 
 std::shared_ptr<MultiUnitsWrapper> HeatFunction::doOperation(int nargs, va_list args) throw (std::invalid_argument) {
@@ -52,6 +53,6 @@ std::shared_ptr<MultiUnitsWrapper> HeatFunction::doOperation(int nargs, va_list 
     }
 }
 
-units::Volume HeatFunction::getMinVolume() {
+units::Volume HeatFunction::getMinVolume() const {
     return minVolume;
 }

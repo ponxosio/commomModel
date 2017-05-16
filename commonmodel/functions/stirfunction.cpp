@@ -4,14 +4,11 @@ StirFunction::StirFunction(
         std::shared_ptr<PluginAbstractFactory> factory,
         const PluginConfiguration & configuration,
         units::Volume minVolume,
-        units::Frequency minIntensity,
-        units::Frequency maxIntensity) :
+        const StirWorkingRange & workingRange) :
     Function(factory)
 {
     this->minVolume = minVolume;
-    this->minIntensity = minIntensity;
-    this->maxIntensity = maxIntensity;
-
+    this->workingRange = std::make_shared<StirWorkingRange>(workingRange);
     configurationObj = std::make_shared<PluginConfiguration>(configuration);
 }
 
@@ -19,17 +16,21 @@ StirFunction::~StirFunction() {
 
 }
 
-Function::OperationType StirFunction::getAceptedOp() {
+Function::OperationType StirFunction::getAceptedOp() const {
     return stir;
 }
 
-bool StirFunction::inWorkingRange(int nargs, va_list args) throw(std::invalid_argument) {
+bool StirFunction::inWorkingRange(int nargs, va_list args) const throw(std::invalid_argument) {
     if (nargs == 1) {
         units::Frequency intensity = va_arg(args, units::Frequency);
-        return ((intensity >= minIntensity) && (intensity <= maxIntensity));
+        return workingRange->inWorkingRange(intensity);
     } else {
         throw(std::invalid_argument(" inWorkingRange() of StirFunction must receive 1 argument, received " + std::to_string(nargs)));
     }
+}
+
+const std::shared_ptr<const ComparableRangeInterface> StirFunction::getComparableWorkingRange() const {
+    return workingRange;
 }
 
 std::shared_ptr<MultiUnitsWrapper> StirFunction::doOperation(int nargs, va_list args) throw (std::invalid_argument) {
@@ -51,6 +52,6 @@ std::shared_ptr<MultiUnitsWrapper> StirFunction::doOperation(int nargs, va_list 
     }
 }
 
-units::Volume StirFunction::getMinVolume() {
+units::Volume StirFunction::getMinVolume() const {
     return minVolume;
 }

@@ -4,14 +4,11 @@ MeasureOdFunction::MeasureOdFunction(
         std::shared_ptr<PluginAbstractFactory> factory,
         const PluginConfiguration & configuration,
         units::Volume minVolume,
-        units::Length minWavelength,
-        units::Length maxWavelength) :
+        const MeasureOdWorkingRange & workingRange) :
     Function(factory)
 {
     this->minVolume = minVolume;
-    this->minWavelength = minWavelength;
-    this->maxWavelength = maxWavelength;
-
+    this->workingRange = std::make_shared<MeasureOdWorkingRange>(workingRange);
     configurationObj = std::make_shared<PluginConfiguration>(configuration);
 }
 
@@ -19,17 +16,21 @@ MeasureOdFunction::~MeasureOdFunction() {
 
 }
 
-Function::OperationType MeasureOdFunction::getAceptedOp() {
+Function::OperationType MeasureOdFunction::getAceptedOp() const {
     return measure_od;
 }
 
-bool MeasureOdFunction::inWorkingRange(int nargs, va_list args) throw(std::invalid_argument) {
+bool MeasureOdFunction::inWorkingRange(int nargs, va_list args) const throw(std::invalid_argument) {
     if (nargs == 1) {
         units::Length wavelength = va_arg(args, units::Length);
-        return ((wavelength >= minWavelength) && (wavelength <= maxWavelength));
+        return workingRange->inWorkingRange(wavelength);
     } else {
         throw(std::invalid_argument(" inWorkingRange() of MeasureOdFunction must receive 1 argument, received " + std::to_string(nargs)));
     }
+}
+
+const std::shared_ptr<const ComparableRangeInterface> MeasureOdFunction::getComparableWorkingRange() const {
+    return workingRange;
 }
 
 std::shared_ptr<MultiUnitsWrapper> MeasureOdFunction::doOperation(int nargs, va_list args) throw (std::invalid_argument) {
@@ -55,6 +56,6 @@ std::shared_ptr<MultiUnitsWrapper> MeasureOdFunction::doOperation(int nargs, va_
     }
 }
 
-units::Volume MeasureOdFunction::getMinVolume() {
+units::Volume MeasureOdFunction::getMinVolume() const {
     return minVolume;
 }

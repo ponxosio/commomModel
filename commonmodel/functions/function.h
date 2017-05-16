@@ -8,6 +8,7 @@
 #include <utils/units.h>
 #include <utils/multiunitswrapper.h>
 
+#include "commonmodel/functions/ranges/comparablerangeinterface.h"
 #include "commonmodel/plugininterface/pluginabstractfactory.h"
 
 class Function
@@ -41,10 +42,13 @@ public:
     }
     virtual ~Function(){}
 
-    virtual OperationType getAceptedOp() = 0;
+    virtual OperationType getAceptedOp() const = 0;
     virtual std::shared_ptr<MultiUnitsWrapper> doOperation(int nargs, va_list args) throw(std::invalid_argument) = 0;
-    virtual units::Volume getMinVolume() = 0;
-    virtual bool inWorkingRange(int nargs, va_list args) throw(std::invalid_argument) = 0;
+
+    virtual bool inWorkingRange(int nargs, va_list args) const throw(std::invalid_argument) = 0;
+    virtual const std::shared_ptr<const ComparableRangeInterface> getComparableWorkingRange() const = 0;
+
+    virtual units::Volume getMinVolume() const = 0;
 
     inline void setFactory(std::shared_ptr<PluginAbstractFactory> factory) {
         this->factory = factory;

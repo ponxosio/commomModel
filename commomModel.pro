@@ -50,7 +50,18 @@ HEADERS += \
     commonmodel/functions/centrifugatefunction.h \
     commonmodel/functions/shakefunction.h \
     commonmodel/plugininterface/electrophoresispluginproduct.h \
-    commonmodel/functions/electrophoresisfunction.h
+    commonmodel/functions/electrophoresisfunction.h \
+    commonmodel/functions/ranges/centrifugationworkingrange.h \
+    commonmodel/functions/ranges/comparablerangeinterface.h \
+    commonmodel/functions/ranges/electrophoresisworkingrange.h \
+    commonmodel/functions/ranges/heaterworkingrange.h \
+    commonmodel/functions/ranges/ligthworkingrange.h \
+    commonmodel/functions/ranges/emptyworkingrange.h \
+    commonmodel/functions/ranges/measurefluorescenceworkingrange.h \
+    commonmodel/functions/ranges/measureodworkingrange.h \
+    commonmodel/functions/ranges/pumpworkingrange.h \
+    commonmodel/functions/ranges/shakeworkingrange.h \
+    commonmodel/functions/ranges/stirworkingrange.h
 
 SOURCES += \
     commonmodel/functions/functionset.cpp \
@@ -67,7 +78,17 @@ SOURCES += \
     commonmodel/functions/measurevolumefunction.cpp \
     commonmodel/functions/centrifugatefunction.cpp \
     commonmodel/functions/shakefunction.cpp \
-    commonmodel/functions/electrophoresisfunction.cpp
+    commonmodel/functions/electrophoresisfunction.cpp \
+    commonmodel/functions/ranges/centrifugationworkingrange.cpp \
+    commonmodel/functions/ranges/electrophoresisworkingrange.cpp \
+    commonmodel/functions/ranges/heaterworkingrange.cpp \
+    commonmodel/functions/ranges/ligthworkingrange.cpp \
+    commonmodel/functions/ranges/emptyworkingrange.cpp \
+    commonmodel/functions/ranges/measurefluorescenceworkingrange.cpp \
+    commonmodel/functions/ranges/measureodworkingrange.cpp \
+    commonmodel/functions/ranges/pumpworkingrange.cpp \
+    commonmodel/functions/ranges/shakeworkingrange.cpp \
+    commonmodel/functions/ranges/stirworkingrange.cpp
 
 debug {
     QMAKE_POST_LINK=X:\commomModel\commomModel\setDLL.bat $$shell_path($$OUT_PWD/debug) debug

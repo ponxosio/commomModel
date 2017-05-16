@@ -15,16 +15,20 @@ MeasureTemperatureFunction::~MeasureTemperatureFunction() {
 
 }
 
-Function::OperationType MeasureTemperatureFunction::getAceptedOp() {
+Function::OperationType MeasureTemperatureFunction::getAceptedOp() const {
     return Function::measure_temperature;
 }
 
-bool MeasureTemperatureFunction::inWorkingRange(int nargs, va_list args) throw(std::invalid_argument) {
+bool MeasureTemperatureFunction::inWorkingRange(int nargs, va_list args) const throw(std::invalid_argument) {
     if (nargs == 0) {
         return true;
     } else {
         throw(std::invalid_argument(" inWorkingRange() of MeasureTemperatureFunction must receive 0 argument, received " + std::to_string(nargs)));
     }
+}
+
+const std::shared_ptr<const ComparableRangeInterface> MeasureTemperatureFunction::getComparableWorkingRange() const {
+    return workingRange;
 }
 
 std::shared_ptr<MultiUnitsWrapper> MeasureTemperatureFunction::doOperation(int nargs, va_list args) throw (std::invalid_argument) {
@@ -47,6 +51,6 @@ std::shared_ptr<MultiUnitsWrapper> MeasureTemperatureFunction::doOperation(int n
     }
 }
 
-units::Volume MeasureTemperatureFunction::getMinVolume() {
+units::Volume MeasureTemperatureFunction::getMinVolume() const {
     return minVolume;
 }

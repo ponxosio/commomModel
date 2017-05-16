@@ -3,13 +3,10 @@
 PumpPluginFunction::PumpPluginFunction(
         std::shared_ptr<PluginAbstractFactory> factory,
         const PluginConfiguration & configuration,
-        units::Volumetric_Flow minRate,
-        units::Volumetric_Flow maxRate) :
+        const PumpWorkingRange & workingrange) :
     Function(factory)
 {
-    this->minRate = minRate;
-    this->maxRate = maxRate;
-
+    this->workingRange = std::make_shared<PumpWorkingRange>(workingrange);
     configurationObj = std::make_shared<PluginConfiguration>(configuration);
 }
 
@@ -17,17 +14,21 @@ PumpPluginFunction::~PumpPluginFunction() {
 
 }
 
-Function::OperationType PumpPluginFunction::getAceptedOp() {
+Function::OperationType PumpPluginFunction::getAceptedOp() const {
     return pump;
 }
 
-bool PumpPluginFunction::inWorkingRange(int nargs, va_list args) throw(std::invalid_argument) {
+bool PumpPluginFunction::inWorkingRange(int nargs, va_list args) const throw(std::invalid_argument) {
     if (nargs == 1) {
         units::Volumetric_Flow rate = va_arg(args, units::Volumetric_Flow);
-        return ((rate >= minRate) && (rate <= maxRate));
+        return workingRange->inWorkingRange(rate);
     } else {
         throw(std::invalid_argument(" inWorkingRange() of PumpPluginFunction must receive 1 arguments, received " + std::to_string(nargs)));
     }
+}
+
+const std::shared_ptr<const ComparableRangeInterface> PumpPluginFunction::getComparableWorkingRange() const {
+    return workingRange;
 }
 
 std::shared_ptr<MultiUnitsWrapper> PumpPluginFunction::doOperation(int nargs, va_list args) throw (std::invalid_argument) {
@@ -50,6 +51,6 @@ std::shared_ptr<MultiUnitsWrapper> PumpPluginFunction::doOperation(int nargs, va
     }
 }
 
-units::Volume PumpPluginFunction::getMinVolume() {
+units::Volume PumpPluginFunction::getMinVolume() const {
     return 0.0 * units::l;
 }

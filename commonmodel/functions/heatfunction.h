@@ -7,6 +7,8 @@
 #include <utils/units.h>
 
 #include "commonmodel/functions/function.h"
+#include "commonmodel/functions/ranges/heaterworkingrange.h"
+
 #include "commonmodel/plugininterface/pluginabstractfactory.h"
 #include "commonmodel/plugininterface/pluginconfiguration.h"
 #include "commonmodel/plugininterface/heaterpluginproduct.h"
@@ -19,19 +21,20 @@ public:
     HeatFunction(std::shared_ptr<PluginAbstractFactory> factory,
                  const PluginConfiguration & configuration,
                  units::Volume minVolume,
-                 units::Temperature minTemperature,
-                 units::Temperature maxTemperature);
+                 const HeaterWorkingRange & workingRange);
     virtual ~HeatFunction();
 
-    virtual OperationType getAceptedOp();
-    virtual bool inWorkingRange(int nargs, va_list args) throw(std::invalid_argument);
+    virtual OperationType getAceptedOp() const;
+
+    virtual bool inWorkingRange(int nargs, va_list args) const throw(std::invalid_argument);
+    virtual const std::shared_ptr<const ComparableRangeInterface> getComparableWorkingRange() const;
+
     virtual std::shared_ptr<MultiUnitsWrapper> doOperation(int nargs, va_list args) throw (std::invalid_argument);
-    virtual units::Volume getMinVolume();
+    virtual units::Volume getMinVolume() const;
 
 protected:
     units::Volume minVolume;
-    units::Temperature minTemperature;
-    units::Temperature maxTemperature;
+    std::shared_ptr<HeaterWorkingRange> workingRange;
 
     std::shared_ptr<PluginConfiguration> configurationObj;
     std::shared_ptr<HeaterPluginProduct> heaterPlugin;
