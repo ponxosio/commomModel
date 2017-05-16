@@ -19,7 +19,7 @@ public:
         heat,
         apply_light,
         measure_od,
-        stir
+        stir,
         centrifugate,
         shake,
         electrophoresis,
