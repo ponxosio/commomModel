@@ -1,27 +1,25 @@
-#ifndef HEATFUNCTION_H
-#define HEATFUNCTION_H
+#ifndef SHAKEFUNCTION_H
+#define SHAKEFUNCTION_H
 
 #include <memory>
 #include <cstdarg>
 
-#include <utils/units.h>
-
 #include "commonmodel/functions/function.h"
 #include "commonmodel/plugininterface/pluginabstractfactory.h"
 #include "commonmodel/plugininterface/pluginconfiguration.h"
-#include "commonmodel/plugininterface/heaterpluginproduct.h"
+#include "commonmodel/plugininterface/shakepluginproduct.h"
 
 #include "commonmodel/commommodel_global.h"
 
-class HEATFUNCTION_EXPORT HeatFunction : public Function
+class ShakeFunction : public Function
 {
 public:
-    HeatFunction(std::shared_ptr<PluginAbstractFactory> factory,
-                 const PluginConfiguration & configuration,
-                 units::Volume minVolume,
-                 units::Temperature minTemperature,
-                 units::Temperature maxTemperature);
-    virtual ~HeatFunction();
+    ShakeFunction(std::shared_ptr<PluginAbstractFactory> factory,
+                  const PluginConfiguration & configuration,
+                  units::Volume minVolume,
+                  units::Frequency minIntensity,
+                  units::Frequency maxIntensity);
+    virtual ~ShakeFunction();
 
     virtual OperationType getAceptedOp();
     virtual bool inWorkingRange(int nargs, va_list args) throw(std::invalid_argument);
@@ -30,11 +28,11 @@ public:
 
 protected:
     units::Volume minVolume;
-    units::Temperature minTemperature;
-    units::Temperature maxTemperature;
+    units::Frequency minIntensity;
+    units::Frequency maxIntensity;
 
     std::shared_ptr<PluginConfiguration> configurationObj;
-    std::shared_ptr<HeaterPluginProduct> heaterPlugin;
+    std::shared_ptr<ShakePluginProduct> shakePlugin;
 };
 
-#endif // HEATFUNCTION_H
+#endif // SHAKEFUNCTION_H

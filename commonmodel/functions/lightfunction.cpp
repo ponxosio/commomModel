@@ -1,9 +1,22 @@
 #include "lightfunction.h"
 
-LightFunction::LightFunction(std::shared_ptr<PluginAbstractFactory> factory, const PluginConfiguration & configuration, double minVolume) :
-    Function(factory) , configurationObj(configuration)
+LightFunction::LightFunction(
+        std::shared_ptr<PluginAbstractFactory> factory,
+        const PluginConfiguration & configuration,
+        units::Volume minVolume,
+        units::Length minWaveLength,
+        units::Length maxWaveLength,
+        units::LuminousIntensity minIntensity,
+        units::LuminousIntensity maxIntensity) :
+    Function(factory)
 {
     this->minVolume = minVolume;
+    this->minWaveLength = minWaveLength;
+    this->maxWaveLength = maxWaveLength;
+    this->minIntensity = minIntensity;
+    this->maxIntensity = maxIntensity;
+
+    configurationObj = std::make_shared<PluginConfiguration>(configuration);
 }
 
 LightFunction::~LightFunction() {
@@ -14,20 +27,35 @@ Function::OperationType LightFunction::getAceptedOp() {
     return apply_light;
 }
 
-MultiUnitsWrapper* LightFunction::doOperation(int nargs, va_list args) throw (std::invalid_argument) {
+bool LightFunction::inWorkingRange(int nargs, va_list args) throw(std::invalid_argument) {
+    if (nargs == 2) {
+        units::LuminousIntensity intensity = va_arg(args, units::LuminousIntensity);
+        units::Length wavelength = va_arg(args, units::Length);
+
+        return (((intensity >= minIntensity) && (intensity <= maxIntensity)) &&
+                ((wavelength >= minWaveLength && (wavelength <= minWaveLength))));
+    } else {
+        throw(std::invalid_argument(" inWorkingRange() of LightFunction must receive 2 argument, received " + std::to_string(nargs)));
+    }
+}
+
+std::shared_ptr<MultiUnitsWrapper> LightFunction::doOperation(int nargs, va_list args) throw (std::invalid_argument) {
     if (!lightPlugin) {
         lightPlugin = factory->makeLight(configurationObj);
     }
 
-    if (nargs == 2) {
+    if (nargs == 2) { //start
         //va_start(ap, args);
         units::LuminousIntensity intensity = va_arg(args, units::LuminousIntensity);
         units::Length wavelength = va_arg(args, units::Length);
         lightPlugin->applyLight(intensity, wavelength);
         //va_end(ap);
         return NULL;
+    } else if (nargs == 0) { //stop
+        lightPlugin->turnOffLight();
+        return NULL;
     } else {
-        throw(std::invalid_argument(" doOperation() of LightFunction must receive 2 argument, received " + std::to_string(nargs)));
+        throw(std::invalid_argument(" doOperation() of LightFunction must receive 2 or 0 argument, received " + std::to_string(nargs)));
     }
 }
 

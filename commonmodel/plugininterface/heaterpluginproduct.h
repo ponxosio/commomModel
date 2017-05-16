@@ -6,10 +6,10 @@
 class HeaterPluginProduct
 {
 public:
-    HeaterPluginProduct(){}
     virtual ~HeaterPluginProduct(){}
 
     virtual void changeTemperature(units::Temperature value) = 0;
+    virtual void turnOff() = 0;
 };
 
 #endif // HEATERPLUGINPRODUCT_H

@@ -5,10 +5,10 @@
 
 class PumpPluginProduct {
 public:
-    PumpPluginProduct(){}
     virtual ~PumpPluginProduct(){}
 
     virtual void setPumpState(int dir, units::Volumetric_Flow rate) = 0;
+    virtual void stopPump() = 0;
 };
 
 #endif // PUMPPLUGINPRODUCT_H

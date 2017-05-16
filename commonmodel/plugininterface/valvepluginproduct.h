@@ -7,6 +7,7 @@ public:
     virtual ~ValvePluginProduct(){}
 
     virtual void moveToPosition(int position) = 0;
+    virtual void closeValve() = 0;
 };
 
 #endif // VALVEPLUGINPRODUCT_H

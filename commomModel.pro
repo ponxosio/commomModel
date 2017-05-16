@@ -36,7 +36,21 @@ HEADERS += \
     commonmodel/plugininterface/pluginconfiguration.h \
     commonmodel/plugininterface/pumppluginproduct.h \
     commonmodel/plugininterface/stirerpluginproduct.h \
-    commonmodel/plugininterface/valvepluginproduct.h
+    commonmodel/plugininterface/valvepluginproduct.h \
+    commonmodel/functions/measuretemperaturefunction.h \
+    commonmodel/plugininterface/temperaturesensorproduct.h \
+    commonmodel/functions/measureluminiscencefunction.h \
+    commonmodel/plugininterface/luminiscencesensorproduct.h \
+    commonmodel/plugininterface/fluorescencesensorproduct.h \
+    commonmodel/functions/measurefluorescencefunction.h \
+    commonmodel/plugininterface/volumesensorproduct.h \
+    commonmodel/functions/measurevolumefunction.h \
+    commonmodel/plugininterface/shakepluginproduct.h \
+    commonmodel/plugininterface/centrifugatepluginproduct.h \
+    commonmodel/functions/centrifugatefunction.h \
+    commonmodel/functions/shakefunction.h \
+    commonmodel/plugininterface/electrophoresispluginproduct.h \
+    commonmodel/functions/electrophoresisfunction.h
 
 SOURCES += \
     commonmodel/functions/functionset.cpp \
@@ -46,7 +60,14 @@ SOURCES += \
     commonmodel/functions/pumppluginfunction.cpp \
     commonmodel/functions/stirfunction.cpp \
     commonmodel/functions/valvepluginroutefunction.cpp \
-    commonmodel/plugininterface/pluginconfiguration.cpp
+    commonmodel/plugininterface/pluginconfiguration.cpp \
+    commonmodel/functions/measuretemperaturefunction.cpp \
+    commonmodel/functions/measureluminiscencefunction.cpp \
+    commonmodel/functions/measurefluorescencefunction.cpp \
+    commonmodel/functions/measurevolumefunction.cpp \
+    commonmodel/functions/centrifugatefunction.cpp \
+    commonmodel/functions/shakefunction.cpp \
+    commonmodel/functions/electrophoresisfunction.cpp
 
 debug {
     QMAKE_POST_LINK=X:\commomModel\commomModel\setDLL.bat $$shell_path($$OUT_PWD/debug) debug

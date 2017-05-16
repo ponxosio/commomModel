@@ -10,6 +10,7 @@ public:
     virtual ~StirerPluginProduct(){}
 
     virtual void stir(units::Frequency intensity) = 0;
+    virtual void turnOff() = 0;
 };
 
 #endif // STIRERPLUGINPRODUCT_H

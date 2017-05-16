@@ -27,7 +27,9 @@ public:
     virtual ~FunctionSet();
 
     bool canDoOperations(unsigned long mask);
-    MultiUnitsWrapper* doOperation(Function::OperationType op, int nargs, va_list args) throw(std::invalid_argument);
+    std::shared_ptr<MultiUnitsWrapper> doOperation(Function::OperationType op, int nargs, va_list args) throw(std::invalid_argument);
+    bool inWorkingRange(Function::OperationType op, int nargs, va_list args) throw(std::invalid_argument);
+
     units::Volume getMinVolume(Function::OperationType op) throw(std::invalid_argument);
     void addOperation(std::shared_ptr<Function> function);
 

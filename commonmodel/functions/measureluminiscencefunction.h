@@ -1,25 +1,21 @@
-#ifndef MEASUREODFUNCTION_H
-#define MEASUREODFUNCTION_H
+#ifndef MEASURELUMINISCENCEFUNCTION_H
+#define MEASURELUMINISCENCEFUNCTION_H
 
 #include <memory>
 #include <cstdarg>
 
 #include "commonmodel/plugininterface/pluginabstractfactory.h"
 #include "commonmodel/plugininterface/pluginconfiguration.h"
-#include "commonmodel/plugininterface/odsensorpluginproduct.h"
+#include "commonmodel/plugininterface/luminiscencesensorproduct.h"
 #include "commonmodel/functions/function.h"
 
 #include "commonmodel/commommodel_global.h"
 
-class MEASUREOD_EXPORT MeasureOdFunction : public Function
+class MEASURELUMINISCENCEFUNCTION_EXPORT MeasureLuminiscenceFunction: public Function
 {
 public:
-    MeasureOdFunction(std::shared_ptr<PluginAbstractFactory> factory,
-                      const PluginConfiguration & configuration,
-                      units::Volume minVolume,
-                      units::Length minWavelength,
-                      units::Length maxWavelength);
-    virtual ~MeasureOdFunction();
+    MeasureLuminiscenceFunction(std::shared_ptr<PluginAbstractFactory> factory, const PluginConfiguration & configuration, units::Volume minVolume);
+    virtual ~MeasureLuminiscenceFunction();
 
     virtual OperationType getAceptedOp();
     virtual bool inWorkingRange(int nargs, va_list args) throw(std::invalid_argument);
@@ -28,11 +24,9 @@ public:
 
 protected:
     units::Volume minVolume;
-    units::Length minWavelength;
-    units::Length maxWavelength;
-
     std::shared_ptr<PluginConfiguration> configurationObj;
-    std::shared_ptr<OdSensorPluginProduct> odSensoPlugin;
+    std::shared_ptr<LuminiscenceSensorProduct> luminiscenceSensoPlugin;
+
 };
 
-#endif // MEASUREODFUNCTION_H
+#endif // MEASURELUMINISCENCEFUNCTION_H

@@ -16,16 +16,28 @@
 class LIGHTFUNCTION_EXPORT LightFunction : public Function
 {
 public:
-    LightFunction(std::shared_ptr<PluginAbstractFactory> factory, const PluginConfiguration & configuration, double minVolume);
+    LightFunction(std::shared_ptr<PluginAbstractFactory> factory,
+                  const PluginConfiguration & configuration,
+                  units::Volume minVolume,
+                  units::Length minWaveLength,
+                  units::Length maxWaveLength,
+                  units::LuminousIntensity minIntensity,
+                  units::LuminousIntensity maxIntensity);
     virtual ~LightFunction();
 
     virtual OperationType getAceptedOp();
-    virtual MultiUnitsWrapper* doOperation(int nargs, va_list args) throw (std::invalid_argument);
+    virtual bool inWorkingRange(int nargs, va_list args) throw(std::invalid_argument) = 0;
+    virtual std::shared_ptr<MultiUnitsWrapper> doOperation(int nargs, va_list args) throw (std::invalid_argument);
     virtual units::Volume getMinVolume();
 
 protected:
-    double minVolume;
-    PluginConfiguration configurationObj;
+    units::Volume minVolume;
+    units::Length minWaveLength;
+    units::Length maxWaveLength;
+    units::LuminousIntensity minIntensity;
+    units::LuminousIntensity maxIntensity;
+
+    std::shared_ptr<PluginConfiguration> configurationObj;
     std::shared_ptr<LightPluginProduct> lightPlugin;
 };
 

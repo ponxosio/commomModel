@@ -1,14 +1,15 @@
 #ifndef ODSENSORPLUGINPRODUCT_H
 #define ODSENSORPLUGINPRODUCT_H
 
+#include <utils/units.h>
 
 class OdSensorPluginProduct
 {
 public:
-    OdSensorPluginProduct(){}
     virtual ~OdSensorPluginProduct(){}
 
-    virtual double measureOd() = 0;
+    virtual void startMeasureOd(units::Frequency measurementFrequency, units::Length waveLength) = 0;
+    virtual double getOdMeasurement() = 0;
 };
 
 #endif // ODSENSORPLUGINPRODUCT_H
