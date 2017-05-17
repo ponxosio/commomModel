@@ -5,7 +5,9 @@
 
 #include "commonmodel/functions/ranges/comparablerangeinterface.h"
 
-class HeaterWorkingRange : public ComparableRangeInterface
+#include "commonmodel/commommodel_global.h"
+
+class HEATERWORKINGRANGE_EXPORT HeaterWorkingRange : public ComparableRangeInterface
 {
 public:
     HeaterWorkingRange(const HeaterWorkingRange & hwr);

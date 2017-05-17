@@ -5,7 +5,9 @@
 
 #include "commonmodel/functions/ranges/comparablerangeinterface.h"
 
-class LigthWorkingRange : public ComparableRangeInterface
+#include "commonmodel/commommodel_global.h"
+
+class LIGTHWORKINGRANGE_EXPORT LigthWorkingRange : public ComparableRangeInterface
 {
 public:
     LigthWorkingRange(const LigthWorkingRange & lwr);

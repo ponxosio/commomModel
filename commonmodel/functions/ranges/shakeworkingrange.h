@@ -5,7 +5,9 @@
 
 #include "commonmodel/functions/ranges/comparablerangeinterface.h"
 
-class ShakeWorkingRange : public ComparableRangeInterface
+#include "commonmodel/commommodel_global.h"
+
+class SHAKEWORKINGRANGE_EXPORT ShakeWorkingRange : public ComparableRangeInterface
 {
 public:
     ShakeWorkingRange(const ShakeWorkingRange & swr);

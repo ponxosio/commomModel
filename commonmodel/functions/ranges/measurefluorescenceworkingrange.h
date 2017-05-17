@@ -5,7 +5,9 @@
 
 #include "commonmodel/functions/ranges/comparablerangeinterface.h"
 
-class MeasureFluorescenceWorkingRange : public ComparableRangeInterface
+#include "commonmodel/commommodel_global.h"
+
+class MEASUREFLUORESCENCEWORKINGRANGE_EXPORT MeasureFluorescenceWorkingRange : public ComparableRangeInterface
 {
 public:
     MeasureFluorescenceWorkingRange(const MeasureFluorescenceWorkingRange & mfwr);

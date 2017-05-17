@@ -5,7 +5,9 @@
 
 #include "commonmodel/functions/ranges/comparablerangeinterface.h"
 
-class MeasureOdWorkingRange : public ComparableRangeInterface
+#include "commonmodel/commommodel_global.h"
+
+class MEASUREODWORKINGRANGE_EXPORT MeasureOdWorkingRange : public ComparableRangeInterface
 {
 public:
     MeasureOdWorkingRange(const MeasureOdWorkingRange & mowr);

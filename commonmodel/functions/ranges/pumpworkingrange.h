@@ -5,7 +5,9 @@
 
 #include "commonmodel/functions/ranges/comparablerangeinterface.h"
 
-class PumpWorkingRange : public ComparableRangeInterface
+#include "commonmodel/commommodel_global.h"
+
+class PUMPWORKINGRANGE_EXPORT PumpWorkingRange : public ComparableRangeInterface
 {
 public:
     PumpWorkingRange(const PumpWorkingRange & pwr);

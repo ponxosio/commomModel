@@ -5,7 +5,9 @@
 
 #include "commonmodel/functions/ranges/comparablerangeinterface.h"
 
-class StirWorkingRange : public ComparableRangeInterface
+#include "commonmodel/commommodel_global.h"
+
+class STIRWORKINGRANGE_EXPORT StirWorkingRange : public ComparableRangeInterface
 {
 public:
     StirWorkingRange(const StirWorkingRange & swr);

@@ -5,7 +5,9 @@
 
 #include "commonmodel/functions/ranges/comparablerangeinterface.h"
 
-class ElectrophoresisWorkingRange : public ComparableRangeInterface
+#include "commonmodel/commommodel_global.h"
+
+class ELECTROPHORESISWORKINGRANGE_EXPORT ElectrophoresisWorkingRange : public ComparableRangeInterface
 {
 public:
     ElectrophoresisWorkingRange(const ElectrophoresisWorkingRange & otherRange);

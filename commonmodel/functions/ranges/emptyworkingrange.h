@@ -3,7 +3,9 @@
 
 #include "commonmodel/functions/ranges/comparablerangeinterface.h"
 
-class EmptyWorkingRange : public ComparableRangeInterface
+#include "commonmodel/commommodel_global.h"
+
+class EMPTYWORKINGRANGE_EXPORT EmptyWorkingRange : public ComparableRangeInterface
 {
 public:
     EmptyWorkingRange(){}

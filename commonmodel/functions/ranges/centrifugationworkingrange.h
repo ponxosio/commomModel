@@ -5,7 +5,9 @@
 
 #include "commonmodel/functions/ranges/comparablerangeinterface.h"
 
-class CentrifugationWorkingRange : public ComparableRangeInterface
+#include "commonmodel/commommodel_global.h"
+
+class CENTRIFUGATIONWORKINGRANGE_EXPORT CentrifugationWorkingRange : public ComparableRangeInterface
 {
 public:
     CentrifugationWorkingRange(const CentrifugationWorkingRange & otherRange);
