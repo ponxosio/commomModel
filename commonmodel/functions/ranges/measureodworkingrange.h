@@ -17,6 +17,12 @@ public:
     virtual bool compatible(const std::shared_ptr<const ComparableRangeInterface> otherRange) const;
     bool inWorkingRange(units::Length wavelength) const;
 
+    inline virtual std::string toString() const {
+        std::stringstream stream;
+        stream << "[" << minWavelength.to(units::nm) << " nm, " << maxWavelength.to(units::nm) << "nm]";
+        return stream.str();
+    }
+
     inline units::Length getMinWaveLength() const {
         return minWavelength;
     }

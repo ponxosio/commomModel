@@ -17,6 +17,12 @@ public:
     virtual bool compatible(const std::shared_ptr<const ComparableRangeInterface> otherRange) const;
     bool inWorkingRange(units::Volumetric_Flow rate) const;
 
+    inline virtual std::string toString() const {
+        std::stringstream stream;
+        stream << "[" << minRate.to(units::ml/units::hr) << " ml/hr, " << maxRate.to(units::ml/units::hr) << "ml/hr]";
+        return stream.str();
+    }
+
     inline units::Volumetric_Flow getMinRate() const {
         return minRate;
     }

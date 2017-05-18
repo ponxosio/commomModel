@@ -20,6 +20,13 @@ public:
     virtual bool compatible(const std::shared_ptr<const ComparableRangeInterface> otherRange) const;
     bool inWorkingRange(units::Length emission, units::Length excitation) const;
 
+    inline virtual std::string toString() const {
+        std::stringstream stream;
+        stream << "emission:[" << minEmission.to(units::nm) << " nm, " << maxEmission.to(units::nm) << "nm]";
+        stream << "excitation:[" << minExcitation.to(units::nm) << " nm, " << maxExcitation.to(units::nm) << "nm]";
+        return stream.str();
+    }
+
     inline units::Length getMinEmission() const {
         return minEmission;
     }

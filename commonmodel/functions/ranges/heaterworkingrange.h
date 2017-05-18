@@ -17,6 +17,12 @@ public:
     virtual bool compatible(const std::shared_ptr<const ComparableRangeInterface> otherRange) const;
     bool inWorkingRange(units::Temperature value) const;
 
+    inline virtual std::string toString() const {
+        std::stringstream stream;
+        stream << "[" << minTemperature.to(units::C) << " Cº, " << maxTemperature.to(units::C) << "Cº]";
+        return stream.str();
+    }
+
     inline units::Temperature getMinTemperature() const {
         return minTemperature;
     }

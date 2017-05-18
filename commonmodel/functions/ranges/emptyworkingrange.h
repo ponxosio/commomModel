@@ -12,6 +12,10 @@ public:
     virtual ~EmptyWorkingRange(){}
 
     virtual bool compatible(const std::shared_ptr<const ComparableRangeInterface> otherRange) const;
+
+    inline virtual std::string toString() const {
+        return "[]";
+    }
 };
 
 #endif // EMPTYWORKINGRANGE_H

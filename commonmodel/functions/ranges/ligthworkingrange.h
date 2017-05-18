@@ -20,6 +20,13 @@ public:
     virtual bool compatible(const std::shared_ptr<const ComparableRangeInterface> otherRange) const;
     bool inWorkingRange(units::Length wavelength, units::LuminousIntensity intensity) const;
 
+    inline virtual std::string toString() const {
+        std::stringstream stream;
+        stream << "intensity:[" << minIntensity.to(units::cd) << " cd, " << maxIntensity.to(units::cd) << "cd];";
+        stream << "wavelength:[" << minWaveLength.to(units::nm) << " nm, " << maxWaveLength.to(units::nm) << "nm]";
+        return stream.str();
+    }
+
     inline units::Length getMinWaveLength() const {
         return minWaveLength;
     }

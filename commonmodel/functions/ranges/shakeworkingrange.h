@@ -16,6 +16,12 @@ public:
     virtual bool compatible(const std::shared_ptr<const ComparableRangeInterface> otherRange) const;
     bool inWorkingRange(units::Frequency intensity) const;
 
+    inline virtual std::string toString() const {
+        std::stringstream stream;
+        stream << "[" << minIntensity.to(units::Hz) << " Hz, " << maxIntensity.to(units::Hz) << "Hz]";
+        return stream.str();
+    }
+
     inline units::Frequency getMinIntensity() const {
         return minIntensity;
     }
