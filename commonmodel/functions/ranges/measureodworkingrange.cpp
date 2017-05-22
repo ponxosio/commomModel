@@ -1,11 +1,15 @@
 #include "measureodworkingrange.h"
 
-MeasureOdWorkingRange::MeasureOdWorkingRange(const MeasureOdWorkingRange & mowr) {
+MeasureOdWorkingRange::MeasureOdWorkingRange(const MeasureOdWorkingRange & mowr) :
+    ComparableRangeInterface(mowr)
+{
     this->minWavelength = mowr.minWavelength;
     this->maxWavelength = mowr.maxWavelength;
 }
 
-MeasureOdWorkingRange::MeasureOdWorkingRange(units::Length minWavelength, units::Length maxWavelength) {
+MeasureOdWorkingRange::MeasureOdWorkingRange(units::Length minWavelength, units::Length maxWavelength) :
+    ComparableRangeInterface()
+{
     this->maxWavelength = maxWavelength;
     this->minWavelength = minWavelength;
 }
@@ -18,7 +22,8 @@ bool MeasureOdWorkingRange::compatible(const std::shared_ptr<const ComparableRan
     bool compatible = false;
     const std::shared_ptr<const MeasureOdWorkingRange> cast = std::dynamic_pointer_cast<const MeasureOdWorkingRange>(otherRange);
     if (cast) {
-        compatible = ((cast->minWavelength >= this->minWavelength) && (cast->maxWavelength <= this->maxWavelength));
+        compatible = this->infinite || otherRange->isInfinite() ||
+                     ((cast->minWavelength >= this->minWavelength) && (cast->maxWavelength <= this->maxWavelength));
     }
     return compatible;
 }

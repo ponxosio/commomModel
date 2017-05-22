@@ -1,6 +1,8 @@
 #include "ligthworkingrange.h"
 
-LigthWorkingRange::LigthWorkingRange(const LigthWorkingRange & lwr) {
+LigthWorkingRange::LigthWorkingRange(const LigthWorkingRange & lwr) :
+    ComparableRangeInterface(lwr)
+{
     this->minIntensity = lwr.minIntensity;
     this->maxIntensity = lwr.maxIntensity;
     this->minWaveLength = lwr.maxWaveLength;
@@ -11,7 +13,8 @@ LigthWorkingRange::LigthWorkingRange(
         units::Length minWaveLength,
         units::Length maxWaveLength,
         units::LuminousIntensity minIntensity,
-        units::LuminousIntensity maxIntensity)
+        units::LuminousIntensity maxIntensity) :
+    ComparableRangeInterface()
 {
     this->minIntensity = minIntensity;
     this->maxIntensity = maxIntensity;
@@ -27,7 +30,8 @@ bool LigthWorkingRange::compatible(const std::shared_ptr<const ComparableRangeIn
     bool compatible = false;
     const std::shared_ptr<const LigthWorkingRange> cast = std::dynamic_pointer_cast<const LigthWorkingRange>(otherRange);
     if (cast) {
-        compatible = (((cast->minWaveLength >= this->minWaveLength) && (cast->maxWaveLength <= this->maxWaveLength)) &&
+        compatible = this->infinite || otherRange->isInfinite() ||
+                     (((cast->minWaveLength >= this->minWaveLength) && (cast->maxWaveLength <= this->maxWaveLength)) &&
                      (cast->minIntensity >= this->minIntensity) && (cast->maxIntensity <= this->maxIntensity));
     }
     return compatible;

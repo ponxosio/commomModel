@@ -1,11 +1,15 @@
 #include "pumpworkingrange.h"
 
-PumpWorkingRange::PumpWorkingRange(const PumpWorkingRange & pwr) {
+PumpWorkingRange::PumpWorkingRange(const PumpWorkingRange & pwr) :
+    ComparableRangeInterface(pwr)
+{
     this->minRate = pwr.minRate;
     this->maxRate = pwr.maxRate;
 }
 
-PumpWorkingRange::PumpWorkingRange(units::Volumetric_Flow minRate, units::Volumetric_Flow maxRate) {
+PumpWorkingRange::PumpWorkingRange(units::Volumetric_Flow minRate, units::Volumetric_Flow maxRate) :
+    ComparableRangeInterface()
+{
     this->minRate = minRate;
     this->maxRate = maxRate;
 }
@@ -18,7 +22,8 @@ bool PumpWorkingRange::compatible(const std::shared_ptr<const ComparableRangeInt
     bool compatible = false;
     const std::shared_ptr<const PumpWorkingRange> cast = std::dynamic_pointer_cast<const PumpWorkingRange>(otherRange);
     if (cast) {
-        compatible = ((cast->minRate >= this->minRate) && (cast->maxRate <= this->maxRate));
+        compatible = this->infinite || otherRange->isInfinite() ||
+                    ((cast->minRate >= this->minRate) && (cast->maxRate <= this->maxRate));
     }
     return compatible;
 }

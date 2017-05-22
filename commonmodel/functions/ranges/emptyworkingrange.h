@@ -8,7 +8,7 @@
 class EMPTYWORKINGRANGE_EXPORT EmptyWorkingRange : public ComparableRangeInterface
 {
 public:
-    EmptyWorkingRange(){}
+    EmptyWorkingRange() : ComparableRangeInterface() {}
     virtual ~EmptyWorkingRange(){}
 
     virtual bool compatible(const std::shared_ptr<const ComparableRangeInterface> otherRange) const;

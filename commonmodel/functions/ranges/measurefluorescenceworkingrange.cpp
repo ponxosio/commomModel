@@ -1,6 +1,8 @@
 #include "measurefluorescenceworkingrange.h"
 
-MeasureFluorescenceWorkingRange::MeasureFluorescenceWorkingRange(const MeasureFluorescenceWorkingRange & mfwr) {
+MeasureFluorescenceWorkingRange::MeasureFluorescenceWorkingRange(const MeasureFluorescenceWorkingRange & mfwr) :
+    ComparableRangeInterface(mfwr)
+{
     this->minEmission = mfwr.minEmission;
     this->maxEmission = mfwr.maxEmission;
     this->minExcitation = mfwr.minExcitation;
@@ -11,7 +13,8 @@ MeasureFluorescenceWorkingRange::MeasureFluorescenceWorkingRange(
         units::Length minEmission,
         units::Length maxEmission,
         units::Length minExcitation,
-        units::Length maxExcitation)
+        units::Length maxExcitation) :
+    ComparableRangeInterface()
 {
     this->minEmission = minEmission;
     this->maxEmission = maxEmission;
@@ -28,7 +31,8 @@ bool MeasureFluorescenceWorkingRange::compatible(const std::shared_ptr<const Com
     const std::shared_ptr<const MeasureFluorescenceWorkingRange> cast =
                     std::dynamic_pointer_cast<const MeasureFluorescenceWorkingRange>(otherRange);
     if (cast) {
-        compatible = (((cast->minEmission >= this->minEmission) && (cast->maxEmission <= this->maxEmission)) &&
+        compatible = this->infinite || otherRange->isInfinite() ||
+                     (((cast->minEmission >= this->minEmission) && (cast->maxEmission <= this->maxEmission)) &&
                      (cast->minExcitation >= this->minExcitation) && (cast->maxExcitation <= this->maxExcitation));
     }
     return compatible;

@@ -1,11 +1,15 @@
 #include "shakeworkingrange.h"
 
-ShakeWorkingRange::ShakeWorkingRange(const ShakeWorkingRange & swr) {
+ShakeWorkingRange::ShakeWorkingRange(const ShakeWorkingRange & swr) :
+    ComparableRangeInterface(swr)
+{
     this->minIntensity = swr.minIntensity;
     this->maxIntensity = swr.maxIntensity;
 }
 
-ShakeWorkingRange::ShakeWorkingRange(units::Frequency minIntensity, units::Frequency maxIntensity) {
+ShakeWorkingRange::ShakeWorkingRange(units::Frequency minIntensity, units::Frequency maxIntensity) :
+    ComparableRangeInterface()
+{
     this->minIntensity = minIntensity;
     this->maxIntensity = maxIntensity;
 }
@@ -14,7 +18,8 @@ bool ShakeWorkingRange::compatible(const std::shared_ptr<const ComparableRangeIn
     bool compatible = false;
     const std::shared_ptr<const ShakeWorkingRange> cast = std::dynamic_pointer_cast<const ShakeWorkingRange>(otherRange);
     if (cast) {
-        compatible = ((cast->minIntensity >= this->minIntensity) && (cast->maxIntensity <= this->maxIntensity));
+        compatible = this->infinite || otherRange->isInfinite() ||
+                    ((cast->minIntensity >= this->minIntensity) && (cast->maxIntensity <= this->maxIntensity));
     }
     return compatible;
 }
