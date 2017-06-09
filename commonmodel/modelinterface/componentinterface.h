@@ -24,6 +24,7 @@ public:
     virtual const std::shared_ptr<const ComparableRangeInterface> getComparableWorkingRange(Function::OperationType op) const = 0;
 
     virtual units::Volume getMinVolume(Function::OperationType op) const throw (std::invalid_argument) = 0;
+    virtual units::Volume getActualVolume() const = 0;
 
     inline const FunctionSet & getAvailableFunctions() const {
         return availableFunctions;

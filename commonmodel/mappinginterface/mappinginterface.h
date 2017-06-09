@@ -13,7 +13,8 @@ class MappingInterface {
 public:
     virtual ~MappingInterface(){}
 
-    virtual bool findRelation(std::shared_ptr<ProtocolSimulatorInterface> simulator) throw(std::invalid_argument) = 0;
+    virtual bool findRelation(std::shared_ptr<ProtocolSimulatorInterface> simulator,
+                              std::string & errorMsg) throw(std::invalid_argument) = 0;
     virtual int getMappedComponent(const std::string & virtualContainer) = 0;
 };
 #endif // MAPPINGINTERFACE_H

@@ -29,5 +29,5 @@ bool PumpWorkingRange::compatible(const std::shared_ptr<const ComparableRangeInt
 }
 
 bool PumpWorkingRange::inWorkingRange(units::Volumetric_Flow rate) const {
-    return ((rate >= minRate) && (rate >= maxRate));
+    return ((rate >= minRate) && (rate <= maxRate));
 }
