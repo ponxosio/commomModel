@@ -6,8 +6,6 @@
 #include <stdexcept>
 #include <string>
 
-#include <protocolGraph/ProtocolGraph.h>
-
 #include "commonmodel/functions/function.h"
 #include "commonmodel/functions/functionset.h"
 
