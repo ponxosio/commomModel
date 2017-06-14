@@ -3,6 +3,7 @@
 LightFunction::LightFunction(
         std::shared_ptr<PluginAbstractFactory> factory,
         const PluginConfiguration & configuration,
+        units::Volume minVolume,
         const LigthWorkingRange & workingRange) :
     Function(factory)
 {
