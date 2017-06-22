@@ -13,7 +13,7 @@
 
 #include "commonmodel/commommodel_global.h"
 
-class ElectrophoresisFunction : public Function
+class ELECTROPHORESISFUNCTION_EXPORT ElectrophoresisFunction : public Function
 {
 public:
     ElectrophoresisFunction(std::shared_ptr<PluginAbstractFactory> factory,

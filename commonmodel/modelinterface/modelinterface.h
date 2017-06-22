@@ -4,7 +4,7 @@
 #include <memory>
 #include <stdexcept>
 
-#include <protocolGraph/ProtocolGraph.h>
+#include <protocolGraph/execution_interface/protocolsimulationinterface.h>
 #include <utils/units.h>
 
 #include "commonmodel/mappinginterface/mappinginterface.h"
@@ -21,7 +21,6 @@ public:
     virtual ~ModelInterface(){}
 
     virtual bool canDoMovement(unsigned long mask) = 0;
-    virtual std::shared_ptr<MappingInterface> findProtocolRelation(std::shared_ptr<ProtocolGraph> protocol) throw(std::invalid_argument) = 0;
 
     virtual std::shared_ptr<ComponentInterface> getComponent(int virtualContainer) throw(std::invalid_argument) = 0;
 

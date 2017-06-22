@@ -13,7 +13,7 @@
 
 #include "commonmodel/commommodel_global.h"
 
-class MeasureVolumeFunction : public Function
+class MEASUREVOLUMEFUNCTION_EXPORT MeasureVolumeFunction : public Function
 {
 public:
     MeasureVolumeFunction(std::shared_ptr<PluginAbstractFactory> factory, const PluginConfiguration & configuration, units::Volume minVolume);

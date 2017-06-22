@@ -13,8 +13,7 @@
 
 #include "commonmodel/commommodel_global.h"
 
-
-class CentrifugateFunction : public Function
+class CENTRIFUGATEFUNCTION_EXPORT CentrifugateFunction : public Function
 {
 public:
     CentrifugateFunction(std::shared_ptr<PluginAbstractFactory> factory,

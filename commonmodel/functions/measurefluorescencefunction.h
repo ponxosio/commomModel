@@ -13,7 +13,7 @@
 
 #include "commonmodel/commommodel_global.h"
 
-class MeasureFluorescenceFunction : public Function
+class MEASUREFLUORESCENCEFUNCTION_EXPORT MeasureFluorescenceFunction : public Function
 {
 public:
     MeasureFluorescenceFunction(std::shared_ptr<PluginAbstractFactory> factory,

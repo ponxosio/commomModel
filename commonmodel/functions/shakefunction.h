@@ -13,7 +13,7 @@
 
 #include "commonmodel/commommodel_global.h"
 
-class ShakeFunction : public Function
+class SHAKEFUNCTION_EXPORT ShakeFunction : public Function
 {
 public:
     ShakeFunction(std::shared_ptr<PluginAbstractFactory> factory,
