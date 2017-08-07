@@ -8,6 +8,7 @@ PumpPluginFunction::PumpPluginFunction(
 {
     this->workingRange = std::make_shared<PumpWorkingRange>(workingrange);
     configurationObj = std::make_shared<PluginConfiguration>(configuration);
+    running = false;
 }
 
 PumpPluginFunction::~PumpPluginFunction() {
@@ -41,10 +42,12 @@ std::shared_ptr<MultiUnitsWrapper> PumpPluginFunction::doOperation(int nargs, va
         int dir = va_arg(args, int);
         units::Volumetric_Flow rate = va_arg(args, units::Volumetric_Flow);
         pluginPump->setPumpState(dir, rate);
+        running = true;
         //va_end(args);
         return NULL;
     } else if (nargs == 0) { //stop
         pluginPump->stopPump();
+        running = false;
         return NULL;
     } else {
         throw(std::invalid_argument(" doOperation() of PumpPluginFunction must receive 2 or 0 arguments, received " + std::to_string(nargs)));
@@ -53,4 +56,10 @@ std::shared_ptr<MultiUnitsWrapper> PumpPluginFunction::doOperation(int nargs, va
 
 units::Volume PumpPluginFunction::getMinVolume() const {
     return 0.0 * units::l;
+}
+
+void PumpPluginFunction::stopOperation() {
+    if (running) {
+        pluginPump->stopPump();
+    }
 }

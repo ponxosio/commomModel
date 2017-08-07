@@ -11,6 +11,7 @@ MeasureFluorescenceFunction::MeasureFluorescenceFunction(
     this->workingRange = std::make_shared<MeasureFluorescenceWorkingRange>(workingRange);
 
     configurationObj = std::make_shared<PluginConfiguration>(configuration);
+    running = false;
 }
 
 MeasureFluorescenceFunction::~MeasureFluorescenceFunction() {
@@ -49,10 +50,12 @@ std::shared_ptr<MultiUnitsWrapper> MeasureFluorescenceFunction::doOperation(int 
         units::Length emission = va_arg(args, units::Length);
 
         fluorescenceSensoPlugin->startMeasureFluorescence(measurementFrequency, excitation, emission);
+        running = true;
         return NULL;
     } else if (nargs == 0) { //return measure value
         std::shared_ptr<MultiUnitsWrapper> valueRead = std::make_shared<MultiUnitsWrapper>();
         valueRead->setLuminousIntensity(fluorescenceSensoPlugin->getFluorescenceMeasurement());
+        running = false;
 
         return valueRead;
     } else {
@@ -62,4 +65,10 @@ std::shared_ptr<MultiUnitsWrapper> MeasureFluorescenceFunction::doOperation(int 
 
 units::Volume MeasureFluorescenceFunction::getMinVolume() const {
     return minVolume;
+}
+
+void MeasureFluorescenceFunction::stopOperation() {
+    if (running) {
+        fluorescenceSensoPlugin->getFluorescenceMeasurement();
+    }
 }

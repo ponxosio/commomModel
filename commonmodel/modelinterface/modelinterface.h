@@ -39,6 +39,8 @@ public:
     virtual void stopContinuousFlow(const std::vector<int> & containersIds) throw(std::invalid_argument) = 0;
     virtual void processFlows() throw(std::runtime_error) = 0;
 
+    virtual void stopAllOperations() = 0;
+
     virtual void updatePluginFactory(std::shared_ptr<PluginAbstractFactory> factory) = 0;
 
 };

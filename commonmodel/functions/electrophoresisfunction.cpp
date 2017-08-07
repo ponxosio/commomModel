@@ -11,6 +11,8 @@ ElectrophoresisFunction::ElectrophoresisFunction(
     this->workingRange = std::make_shared<ElectrophoresisWorkingRange>(workingRange);
 
     configurationObj = std::make_shared<PluginConfiguration>(configuration);
+
+    this->running = false;
 }
 
 ElectrophoresisFunction::~ElectrophoresisFunction() {
@@ -42,10 +44,12 @@ std::shared_ptr<MultiUnitsWrapper> ElectrophoresisFunction::doOperation(int narg
     if (nargs == 1) { //start
         units::ElectricField eField = va_arg(args, units::ElectricField);
         electrophoresisPlugin->startElectrophoresis(eField);
+        this->running = true;
         return NULL;
     } else if(nargs == 0) { //stop
         std::shared_ptr<MultiUnitsWrapper> valueReturned = std::make_shared<MultiUnitsWrapper>();
         valueReturned->setElectrophoresisResult(electrophoresisPlugin->stopElectrophpresis());
+        this->running = false;
         return valueReturned;
     } else {
         throw(std::invalid_argument(" doOperation() of ElectrophoresisFunction must receive 1 or 0 argument, received " + std::to_string(nargs)));
@@ -54,4 +58,11 @@ std::shared_ptr<MultiUnitsWrapper> ElectrophoresisFunction::doOperation(int narg
 
 units::Volume ElectrophoresisFunction::getMinVolume() const {
     return minVolume;
+}
+
+void ElectrophoresisFunction::stopOperation() {
+    if (running) {
+        electrophoresisPlugin->stopElectrophpresis();
+        this->running = false;
+    }
 }

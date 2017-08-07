@@ -29,7 +29,10 @@ public:
     virtual const std::shared_ptr<const ComparableRangeInterface> getComparableWorkingRange() const;
     virtual units::Volume getMinVolume() const;
 
+    virtual void stopOperation();
+
 protected:
+    bool running;
     units::Volume minVolume;
     std::shared_ptr<CentrifugationWorkingRange> workingRange;
 

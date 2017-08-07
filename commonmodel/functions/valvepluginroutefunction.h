@@ -26,7 +26,10 @@ public:
 
     virtual units::Volume getMinVolume() const;
 
+    virtual void stopOperation();
+
 protected:
+    bool running;
     std::shared_ptr<EmptyWorkingRange> workingRange;
     std::shared_ptr<PluginConfiguration> configurationObj;
     std::shared_ptr<ValvePluginProduct> valvePlugin;

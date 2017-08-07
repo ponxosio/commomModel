@@ -24,6 +24,10 @@ public:
     virtual units::Volume getMinVolume(Function::OperationType op) const throw (std::invalid_argument) = 0;
     virtual units::Volume getActualVolume() const = 0;
 
+    inline virtual void stopAllOperations() {
+        availableFunctions.stopAllOperations();
+    }
+
     inline const FunctionSet & getAvailableFunctions() const {
         return availableFunctions;
     }

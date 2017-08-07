@@ -10,6 +10,7 @@ StirFunction::StirFunction(
     this->minVolume = minVolume;
     this->workingRange = std::make_shared<StirWorkingRange>(workingRange);
     configurationObj = std::make_shared<PluginConfiguration>(configuration);
+    running = false;
 }
 
 StirFunction::~StirFunction() {
@@ -42,10 +43,12 @@ std::shared_ptr<MultiUnitsWrapper> StirFunction::doOperation(int nargs, va_list 
         //va_start(ap, args);
         units::Frequency intensity = va_arg(args, units::Frequency);
         stirPlugin->stir(intensity);
+        running = true;
         //va_end(ap);
         return NULL;
     } else if(nargs == 0) { //stop
         stirPlugin->turnOff();
+        running = false;
         return NULL;
     } else {
         throw(std::invalid_argument(" doOperation() of StirFunction must receive 1 or 0 argument, received " + std::to_string(nargs)));
@@ -54,4 +57,11 @@ std::shared_ptr<MultiUnitsWrapper> StirFunction::doOperation(int nargs, va_list 
 
 units::Volume StirFunction::getMinVolume() const {
     return minVolume;
+}
+
+void StirFunction::stopOperation() {
+    if (running) {
+        stirPlugin->turnOff();
+        running = false;
+    }
 }

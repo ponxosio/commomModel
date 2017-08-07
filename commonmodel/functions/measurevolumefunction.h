@@ -27,7 +27,10 @@ public:
 
     virtual units::Volume getMinVolume() const;
 
+    virtual void stopOperation();
+
 protected:
+    bool running;
     units::Volume minVolume;
     std::shared_ptr<EmptyWorkingRange> workingRange;
 

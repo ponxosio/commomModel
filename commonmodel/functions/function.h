@@ -50,6 +50,8 @@ public:
 
     virtual units::Volume getMinVolume() const = 0;
 
+    virtual void stopOperation() = 0;
+
     inline void setFactory(std::shared_ptr<PluginAbstractFactory> factory) {
         this->factory = factory;
     }

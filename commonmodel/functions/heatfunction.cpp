@@ -10,6 +10,8 @@ HeatFunction::HeatFunction(
     this->minVolume = minVolume;
     this->workingRange = std::make_shared<HeaterWorkingRange>(workingRange);
     configurationObj = std::make_shared<PluginConfiguration>(configuration);
+
+    this->running = false;
 }
 
 HeatFunction::~HeatFunction() {
@@ -42,10 +44,12 @@ std::shared_ptr<MultiUnitsWrapper> HeatFunction::doOperation(int nargs, va_list 
         //va_start(ap, args);
         units::Temperature temperature = va_arg(args, units::Temperature);
         heaterPlugin->changeTemperature(temperature);
+        this->running = true;
         //va_end(ap);
         return NULL;
     } else if (nargs == 0) { //turn off
         heaterPlugin->turnOff();
+        this->running = false;
         //va_end(ap);
         return NULL;
     } else {
@@ -55,4 +59,11 @@ std::shared_ptr<MultiUnitsWrapper> HeatFunction::doOperation(int nargs, va_list 
 
 units::Volume HeatFunction::getMinVolume() const {
     return minVolume;
+}
+
+void HeatFunction::stopOperation() {
+    if(running) {
+        heaterPlugin->turnOff();
+        this->running = false;
+    }
 }
