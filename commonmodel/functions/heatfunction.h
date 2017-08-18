@@ -32,7 +32,10 @@ public:
     virtual std::shared_ptr<MultiUnitsWrapper> doOperation(int nargs, va_list args) throw (std::invalid_argument);
     virtual units::Volume getMinVolume() const;
 
+    virtual void stopOperation();
+
 protected:
+    bool running;
     units::Volume minVolume;
     std::shared_ptr<HeaterWorkingRange> workingRange;
 

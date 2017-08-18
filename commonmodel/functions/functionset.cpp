@@ -112,3 +112,9 @@ void FunctionSet::setFactory(Function::OperationType op, std::shared_ptr<PluginA
         throw(std::invalid_argument("funtion " + std::to_string((int) op) + " not present"));
     }
 }
+
+void FunctionSet::stopAllOperations() {
+    for(auto funcPair : functionsMap) {
+        funcPair.second->stopOperation();
+    }
+}

@@ -10,6 +10,7 @@ MeasureOdFunction::MeasureOdFunction(
     this->minVolume = minVolume;
     this->workingRange = std::make_shared<MeasureOdWorkingRange>(workingRange);
     configurationObj = std::make_shared<PluginConfiguration>(configuration);
+    running = false;
 }
 
 MeasureOdFunction::~MeasureOdFunction() {
@@ -44,11 +45,13 @@ std::shared_ptr<MultiUnitsWrapper> MeasureOdFunction::doOperation(int nargs, va_
         units::Frequency measurementFrequency = va_arg(args, units::Frequency);
         units::Length wavelength = va_arg(args, units::Length);
         odSensoPlugin->startMeasureOd(measurementFrequency, wavelength);
+        running = true;
 
         return NULL;
     } else if (nargs == 0) { //returnMeasurement
         std::shared_ptr<MultiUnitsWrapper> valueRead = std::make_shared<MultiUnitsWrapper>();
         valueRead->setNoUnits(odSensoPlugin->getOdMeasurement());
+        running = false;
 
         return valueRead;
     } else {
@@ -58,4 +61,11 @@ std::shared_ptr<MultiUnitsWrapper> MeasureOdFunction::doOperation(int nargs, va_
 
 units::Volume MeasureOdFunction::getMinVolume() const {
     return minVolume;
+}
+
+void MeasureOdFunction::stopOperation() {
+    if (running) {
+        odSensoPlugin->getOdMeasurement();
+        running = false;
+    }
 }

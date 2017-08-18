@@ -11,6 +11,7 @@ LightFunction::LightFunction(
     this->workingRange = std::make_shared<LigthWorkingRange>(workingRange);
 
     configurationObj = std::make_shared<PluginConfiguration>(configuration);
+    running = false;
 }
 
 LightFunction::~LightFunction() {
@@ -46,10 +47,12 @@ std::shared_ptr<MultiUnitsWrapper> LightFunction::doOperation(int nargs, va_list
         units::LuminousIntensity intensity = va_arg(args, units::LuminousIntensity);
         units::Length wavelength = va_arg(args, units::Length);
         lightPlugin->applyLight(intensity, wavelength);
+        running = true;
         //va_end(ap);
         return NULL;
     } else if (nargs == 0) { //stop
         lightPlugin->turnOffLight();
+        running = false;
         return NULL;
     } else {
         throw(std::invalid_argument(" doOperation() of LightFunction must receive 2 or 0 argument, received " + std::to_string(nargs)));
@@ -58,4 +61,11 @@ std::shared_ptr<MultiUnitsWrapper> LightFunction::doOperation(int nargs, va_list
 
 units::Volume LightFunction::getMinVolume() const {
     return minVolume;
+}
+
+void LightFunction::stopOperation() {
+    if (running) {
+       running = false;
+       lightPlugin->turnOffLight();
+    }
 }

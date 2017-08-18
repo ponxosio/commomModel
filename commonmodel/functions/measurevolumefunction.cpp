@@ -9,6 +9,7 @@ MeasureVolumeFunction::MeasureVolumeFunction(
     this->minVolume = minVolume;
     this->workingRange = std::make_shared<EmptyWorkingRange>();
     configurationObj = std::make_shared<PluginConfiguration>(configuration);
+    running = false;
 }
 
 MeasureVolumeFunction::~MeasureVolumeFunction() {
@@ -41,10 +42,12 @@ std::shared_ptr<MultiUnitsWrapper> MeasureVolumeFunction::doOperation(int nargs,
         //va_end(args);
         units::Frequency measurementFrequency = va_arg(args, units::Frequency);
         volumeSensorPlugin->startMeasureVolume(measurementFrequency);
+        running = true;
         return NULL;
     } else if (nargs == 0) { //get measure value
         std::shared_ptr<MultiUnitsWrapper> valueRead = std::make_shared<MultiUnitsWrapper>();
         valueRead->setVolume(volumeSensorPlugin->getVolumeMeasurement());
+        running = false;
         return valueRead;
     } else {
         throw(std::invalid_argument(" doOperation() of MeasureVolumeFunction must receive 1 or 0 argument, received " + std::to_string(nargs)));
@@ -53,4 +56,11 @@ std::shared_ptr<MultiUnitsWrapper> MeasureVolumeFunction::doOperation(int nargs,
 
 units::Volume MeasureVolumeFunction::getMinVolume() const {
     return minVolume;
+}
+
+void MeasureVolumeFunction::stopOperation() {
+    if (running) {
+        volumeSensorPlugin->getVolumeMeasurement();
+        running = false;
+    }
 }

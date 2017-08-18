@@ -29,7 +29,10 @@ public:
 
     virtual units::Volume getMinVolume() const;
 
+    virtual void stopOperation();
+
 protected:
+    bool running;
     std::shared_ptr<PumpWorkingRange> workingRange;
 
     std::shared_ptr<PluginConfiguration> configurationObj;

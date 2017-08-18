@@ -10,6 +10,7 @@ ShakeFunction::ShakeFunction(
     this->minVolume = minVolume;
     this->workingRange = std::make_shared<ShakeWorkingRange>(workingRange);
     configurationObj = std::make_shared<PluginConfiguration>(configuration);
+    running = false;
 }
 
 ShakeFunction::~ShakeFunction() {
@@ -41,9 +42,11 @@ std::shared_ptr<MultiUnitsWrapper> ShakeFunction::doOperation(int nargs, va_list
     if (nargs == 1) {
         units::Frequency intensity = va_arg(args, units::Frequency);
         shakePlugin->startShake(intensity);
+        running = true;
         return NULL;
     } else if(nargs == 0) { //stop
         shakePlugin->stopShake();
+        running = false;
         return NULL;
     } else {
         throw(std::invalid_argument(" doOperation() of ShakePluginFunction must receive 1 or 0 argument, received " + std::to_string(nargs)));
@@ -52,4 +55,11 @@ std::shared_ptr<MultiUnitsWrapper> ShakeFunction::doOperation(int nargs, va_list
 
 units::Volume ShakeFunction::getMinVolume() const {
     return minVolume;
+}
+
+void ShakeFunction::stopOperation() {
+    if (running) {
+        shakePlugin->stopShake();
+        running = false;
+    }
 }

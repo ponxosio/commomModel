@@ -38,6 +38,8 @@ public:
     void setFactory(std::shared_ptr<PluginAbstractFactory> factory);
     void setFactory(Function::OperationType op, std::shared_ptr<PluginAbstractFactory> factory) throw(std::invalid_argument);
 
+    void stopAllOperations();
+
     inline unsigned long getAvailableOperations() const {
         return aceptedFunctions.to_ulong();
     }

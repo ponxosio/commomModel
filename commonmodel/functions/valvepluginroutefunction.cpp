@@ -5,6 +5,7 @@ ValvePluginRouteFunction::ValvePluginRouteFunction(std::shared_ptr<PluginAbstrac
 {
     workingRange = std::make_shared<EmptyWorkingRange>();
     configurationObj = std::make_shared<PluginConfiguration>(configuration);
+    running = false;
 }
 
 ValvePluginRouteFunction::~ValvePluginRouteFunction() {
@@ -36,10 +37,12 @@ std::shared_ptr<MultiUnitsWrapper> ValvePluginRouteFunction::doOperation(int nar
         //va_start(args, nargs);
         int newPosition = va_arg(args, int);
         valvePlugin->moveToPosition(newPosition);
+        running = true;
         //va_end(args);
         return NULL;
     } else if (nargs == 0) { //close valve
         valvePlugin->closeValve();
+        running = false;
         return NULL;
     } else {
         throw(std::invalid_argument(" doOperation() of ValvePLuginRouteFunction must receive 1 or 0 argument, received " + std::to_string(nargs)));
@@ -50,3 +53,9 @@ units::Volume ValvePluginRouteFunction::getMinVolume() const {
     return 0.0 * units::l;
 }
 
+void ValvePluginRouteFunction::stopOperation() {
+    if (running) {
+        valvePlugin->closeValve();
+        running = false;
+    }
+}

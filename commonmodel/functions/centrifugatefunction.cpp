@@ -11,6 +11,8 @@ CentrifugateFunction::CentrifugateFunction(
     this->workingRange = std::make_shared<CentrifugationWorkingRange>(workingRange);
 
     this->configurationObj = std::make_shared<PluginConfiguration>(configuration);
+
+    this->running = false;
 }
 
 CentrifugateFunction::~CentrifugateFunction() {
@@ -42,9 +44,11 @@ std::shared_ptr<MultiUnitsWrapper> CentrifugateFunction::doOperation(int nargs, 
     if (nargs == 1) { //start
         units::Frequency intensity = va_arg(args, units::Frequency);
         centrifugatePlugin->startCentrifugate(intensity);
+        this->running = true;
         return NULL;
     } else if(nargs == 0) { //stop
         centrifugatePlugin->turnOff();
+        this->running = false;
         return NULL;
     } else {
         throw(std::invalid_argument(" doOperation() of CentrifugateFunction must receive 1 or 0 argument, received " + std::to_string(nargs)));
@@ -53,4 +57,11 @@ std::shared_ptr<MultiUnitsWrapper> CentrifugateFunction::doOperation(int nargs, 
 
 units::Volume CentrifugateFunction::getMinVolume() const {
     return minVolume;
+}
+
+void CentrifugateFunction::stopOperation() {
+    if (running) {
+        centrifugatePlugin->turnOff();
+        this->running = false;
+    }
 }

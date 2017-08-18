@@ -10,6 +10,7 @@ MeasureLuminiscenceFunction::MeasureLuminiscenceFunction(
 
     workingRange = std::make_shared<EmptyWorkingRange>();
     configurationObj = std::make_shared<PluginConfiguration>(configuration);
+    running = false;
 }
 
 MeasureLuminiscenceFunction::~MeasureLuminiscenceFunction() {
@@ -42,10 +43,12 @@ std::shared_ptr<MultiUnitsWrapper> MeasureLuminiscenceFunction::doOperation(int 
         //va_end(args);
         units::Frequency measurementFrequency = va_arg(args, units::Frequency);
         luminiscenceSensoPlugin->startMeasureLuminiscence(measurementFrequency);
+        running = true;
         return NULL;
     } else if (nargs == 0) { //get measure value
         std::shared_ptr<MultiUnitsWrapper> valueRead = std::make_shared<MultiUnitsWrapper>();
         valueRead->setLuminousIntensity(luminiscenceSensoPlugin->getLuminiscenceMeasurement());
+        running = false;
         return valueRead;
     } else {
         throw(std::invalid_argument(" doOperation() of MeasureLuminiscenceFunction must receive 1 or 0 argument, received " + std::to_string(nargs)));
@@ -54,4 +57,11 @@ std::shared_ptr<MultiUnitsWrapper> MeasureLuminiscenceFunction::doOperation(int 
 
 units::Volume MeasureLuminiscenceFunction::getMinVolume() const {
     return minVolume;
+}
+
+void MeasureLuminiscenceFunction::stopOperation() {
+    if (running) {
+        luminiscenceSensoPlugin->getLuminiscenceMeasurement();
+        running = false;
+    }
 }
